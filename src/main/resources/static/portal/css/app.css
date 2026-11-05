@@ -1,0 +1,25 @@
+:root{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#142443;background:#f2f5fc;font-synthesis:none}*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}button{cursor:pointer;border:1px solid #ccdaf0;border-radius:10px;background:#fff;color:#203963;padding:10px 15px}button:hover{background:#edf3ff}button:disabled{cursor:not-allowed;opacity:.45}.primary{background:#3261eb;border-color:#3261eb;color:#fff;font-weight:700}.primary:hover{background:#2450cf}.topbar{background:#14213d;color:#fff;padding:14px max(24px,calc((100% - 1260px)/2));display:flex;align-items:center;justify-content:space-between;gap:14px}.brand{display:flex;gap:10px;align-items:center}.brand img{height:42px;width:42px;object-fit:contain}.brand b{display:block;font-size:21px}.brand small{display:block;font-size:10px;letter-spacing:.18em;color:#abc5ff}.account{display:flex;gap:15px;align-items:center;font-size:13px}.account button{background:transparent;color:#fff;border-color:#50638a}main{max-width:1260px;margin:auto;padding:26px}.hero{padding:18px 4px 27px}.hero h1{font-size:clamp(26px,3vw,36px);margin:10px 0}.hero p{color:#667993}.eyebrow{text-transform:uppercase;color:#3369e8;font-size:11px;font-weight:800;letter-spacing:.17em}.card{background:#fff;border:1px solid #dce6f7;box-shadow:0 9px 30px rgba(21,39,79,.05);border-radius:18px;padding:28px;margin:0 0 20px}.card h2{font-size:22px;margin:12px 0}.card p,.muted{color:#6d7e95}.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}.section-head p{margin:0}.split{display:grid;grid-template-columns:1fr 1fr;gap:20px}.select-label{display:flex;align-items:center;gap:15px;margin:20px 0;color:#536986;font-size:14px}.select-label select{min-width:240px;max-width:100%;padding:12px;border:1px solid #d9e3f4;border-radius:12px;background:#f7faff}table{width:100%;border-collapse:collapse}th{text-align:left;background:#f2f6fd;color:#617498;text-transform:uppercase;letter-spacing:.06em;font-size:11px;padding:13px}td{border-bottom:1px solid #e7edf6;padding:15px 13px;font-size:13px}td button{padding:7px 9px;font-size:12px}td small{display:block;color:#7b8da6}.table-wrap{overflow-x:auto;margin-top:14px}.notice{background:#fff1f0;color:#a82825;padding:13px 17px;border:1px solid #ffd2c8;border-radius:12px;margin-bottom:18px}.notice.ok{background:#ebfbf2;color:#167448;border-color:#b8ead0}.form-grid{display:grid;gap:16px;max-width:530px}label{display:block;font-size:13px;font-weight:600}label input,label textarea{display:block;width:100%;border-radius:9px;padding:12px;border:1px solid #cfdaed;margin-top:6px}dialog{border:1px solid #dce5f5;border-radius:18px;box-shadow:0 20px 70px #12203d33;padding:28px;width:min(95vw,480px)}dialog::backdrop{background:#14213da8}dialog form{display:grid;gap:17px}.dialog-actions{display:flex;justify-content:flex-end;gap:10px}.pill{border-radius:50px;background:#e4f8ec;color:#176a44;font-weight:800;padding:6px 10px}.pill.pending{background:#fff1de;color:#835700}.sum{display:flex;gap:14px;flex-wrap:wrap;margin:15px 0}.sum span{background:#f3f7ff;border-radius:10px;padding:12px}.card-block{padding:14px 0;border-bottom:1px solid #e7edf6}.card-block h3{margin:0 0 10px}.note-line{font-size:13px;color:#63768e;padding:4px 0}#student-print{margin-top:20px}@media(max-width:800px){.split{grid-template-columns:1fr}.card{padding:18px}.topbar{padding:12px 18px}.select-label{display:block}.select-label select{display:block;width:100%;min-width:0;margin-top:8px}.section-head{align-items:start;flex-wrap:wrap}.account{font-size:11px}.topbar .brand b{font-size:17px}}@media print{.topbar,.hero,.notice,#login-card,#password-card,button,.section-head{display:none!important}main{padding:0}.card{box-shadow:none;border:0}body{background:white}.split{display:none}#student{display:block!important}}
+
+/* Etapa 11: accesibilidad y disposicion en telefonos compactos. */
+:where(button, a, input, select, textarea):focus-visible {
+  outline: 3px solid #2867ef;
+  outline-offset: 3px;
+}
+@media (max-width: 520px) {
+  .topbar { flex-wrap: wrap; gap: 12px; }
+  .account { width: 100%; justify-content: space-between; flex-wrap: wrap; }
+  main { padding: 16px 12px; }
+  .hero { padding: 12px 0 20px; }
+  .card { padding: 18px 14px; border-radius: 14px; }
+  .sum span { flex: 1 1 110px; }
+  .dialog-actions { flex-wrap: wrap; }
+  .dialog-actions button { flex: 1 1 120px; }
+  dialog { padding: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

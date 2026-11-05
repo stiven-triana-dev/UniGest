@@ -1,0 +1,37 @@
+name: UniGest - Maven y PostgreSQL
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_DB: unigest_ci
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ci_ephemeral_only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d unigest_ci"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      DB_URL: jdbc:postgresql://localhost:5432/unigest_ci
+      DB_USER: postgres
+      DB_PASSWORD: ci_ephemeral_only
+    steps:
+      - uses: actions/checkout@v4
+      - name: Java 21 y caché Maven
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Pruebas
+        run: mvn -B clean test

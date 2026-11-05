@@ -1,0 +1,647 @@
+
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#10192e">
+  <meta name="description" content="UniGest - Gestión universitaria">
+  <title>UniGest | Panel académico</title>
+  <link rel="icon" href="./img/logo-unigest.png" type="image/png">
+  <link rel="stylesheet" href="./css/app.css">
+  <script src="./js/app.js" defer></script>
+</head>
+<body>
+
+<div class="app-shell">
+  <!-- MENÚ PRINCIPAL -->
+  <aside class="sidebar" id="sidebar" aria-label="Navegación principal">
+    <div class="brand">
+      <img class="brand-logo" src="./img/logo-unigest.png" alt="Logo UniGest">
+      <div>
+        <div class="brand-title">UniGest</div>
+        <div class="brand-subtitle">GESTIÓN UNIVERSITARIA</div>
+      </div>
+    </div>
+
+    <div class="sidebar-label">MENÚ PRINCIPAL</div>
+    <nav class="nav" aria-label="Secciones">
+      <button class="nav-link active" data-view="inicio" aria-current="page"><span class="nav-icon">▦</span>Inicio</button>
+      <button class="nav-link" data-view="estudiantes"><span class="nav-icon">♧</span>Estudiantes</button>
+      <button class="nav-link" data-view="docentes"><span class="nav-icon">♙</span>Docentes</button>
+      <button class="nav-link" data-view="grupos"><span class="nav-icon">▦</span>Grupos Académicos</button>
+      <button class="nav-link" data-view="matriculas"><span class="nav-icon">▣</span>Matrículas Académicas</button>
+      <button class="nav-link" data-view="programas"><span class="nav-icon">▤</span>Programas</button>
+      <button class="nav-link" data-view="asignaturas"><span class="nav-icon">▧</span>Asignaturas</button>
+      <button class="nav-link" data-view="evaluaciones"><span class="nav-icon">◇</span>Evaluaciones y Notas</button>
+      <button class="nav-link" data-view="reportes"><span class="nav-icon">▤</span>Reportes Académicos</button>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-help">
+        <span class="status-dot"></span>
+        <div><strong>Entorno local</strong><small>Solo para desarrollo y pruebas</small></div>
+      </div>
+      <button class="sidebar-exit" id="logout-btn" type="button" disabled>Cerrar sesión <span>↗</span></button>
+      <div class="sidebar-footer">UNIGEST · VERSIÓN 0.11.0</div>
+    </div>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <div class="main-shell">
+    <header class="topbar">
+      <div class="topbar-leading">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
+        <span class="crumb">Plataforma académica <span class="crumb-slash">/</span> <strong id="breadcrumb">Inicio</strong></span>
+      </div>
+      <div class="topbar-actions">
+        <span class="topbar-environment"><span class="status-dot"></span> Localhost</span>
+        <div class="account-chip"><span class="account-avatar">AD</span><span id="account-name">Sin sesión</span></div>
+      </div>
+    </header>
+
+    <main class="main-content" id="content">
+      <div class="page-heading">
+        <div>
+          <span class="eyebrow" id="eyebrow">VISTA GENERAL</span>
+          <h1 id="page-title">Bienvenido a UniGest</h1>
+          <p id="page-subtitle">Gestiona la información académica de manera sencilla y organizada.</p>
+        </div>
+        <div class="page-heading-actions">
+          <button class="button button-outline" id="refresh-btn"><span>↻</span> Actualizar</button>
+        </div>
+      </div>
+      <div class="flash-message" id="flash" role="status" aria-live="polite" hidden></div>
+
+      <!-- INICIO -->
+      <section id="view-inicio" class="view active">
+        <div class="welcome-banner">
+          <div class="welcome-copy">
+            <span class="banner-tag">PORTAL DE ADMINISTRACIÓN</span>
+            <h2>Tu comunidad académica,<em> en un solo lugar.</em></h2>
+            <p>Organiza estudiantes, docentes, grupos y matrículas desde una plataforma conectada a PostgreSQL.</p>
+            <button class="button button-light" id="welcome-student-btn">Gestionar estudiantes ↗</button>
+          </div>
+          <div class="banner-art" aria-hidden="true">
+            <div class="art-ring art-ring-1"></div>
+            <div class="art-ring art-ring-2"></div>
+            <img class="welcome-logo" src="./img/logo-unigest.png" alt="">
+          </div>
+        </div>
+
+        <div class="section-title">
+          <div><span class="eyebrow">PANORAMA ACADÉMICO</span><h2>Resumen institucional</h2></div>
+          <span class="updated-label" id="updated-at">Datos del servidor local</span>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card">
+            <div class="stat-top"><span class="stat-icon icon-blue">♧</span><span class="stat-accent">ACTIVOS</span></div>
+            <strong id="stat-students">—</strong><span>Estudiantes registrados</span><small>Usuarios académicos activos</small>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span class="stat-icon icon-purple">▤</span><span class="stat-accent">OFERTA</span></div>
+            <strong id="stat-programs">—</strong><span>Programas universitarios</span><small>Programas disponibles</small>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span class="stat-icon icon-amber">▧</span><span class="stat-accent">CATÁLOGO</span></div>
+            <strong id="stat-subjects">—</strong><span>Asignaturas disponibles</span><small>Materias del sistema</small>
+          </article>
+        </div>
+
+        <div class="home-grid">
+          <section class="surface-panel home-panel">
+            <div class="panel-head"><div><span class="eyebrow">GESTIÓN DIARIA</span><h3>Accesos rápidos</h3></div></div>
+            <div class="quick-actions">
+              <button class="quick-card" id="quick-new"><span class="quick-icon">＋</span><span><strong>Nuevo estudiante</strong><small>Registrar estudiante</small></span><span class="quick-arrow">↗</span></button>
+              <button class="quick-card" data-go="grupos"><span class="quick-icon">▦</span><span><strong>Grupos académicos</strong><small>Administrar grupos y cupos</small></span><span class="quick-arrow">↗</span></button>
+              <button class="quick-card" data-go="matriculas"><span class="quick-icon">▣</span><span><strong>Matrículas académicas</strong><small>Inscripciones y retiros</small></span><span class="quick-arrow">↗</span></button>
+              <button class="quick-card" data-go="programas"><span class="quick-icon">▤</span><span><strong>Ver programas</strong><small>Oferta académica</small></span><span class="quick-arrow">↗</span></button>
+              <button class="quick-card" data-go="asignaturas"><span class="quick-icon">▧</span><span><strong>Ver asignaturas</strong><small>Materias y créditos</small></span><span class="quick-arrow">↗</span></button>
+            </div>
+          </section>
+
+          <section class="surface-panel notice-panel">
+            <span class="eyebrow">SOBRE ESTA VERSIÓN</span>
+            <h3>Construido paso a paso</h3>
+            <p>UniGest es un proyecto educativo conectado a Spring Boot y PostgreSQL.</p>
+            <div class="notice-line"><span class="notice-check">✓</span> Consultas académicas</div>
+            <div class="notice-line"><span class="notice-check">✓</span> Gestión de estudiantes y docentes</div>
+            <div class="notice-line"><span class="notice-check">✓</span> Grupos y matrículas académicas</div>
+            <div class="notice-line"><span class="notice-check">✓</span> Acceso administrativo con CSRF</div>
+            <p class="notice-warning">Entorno de desarrollo: utiliza únicamente información ficticia.</p>
+          </section>
+        </div>
+      </section>
+
+      <!-- ESTUDIANTES -->
+      <section id="view-estudiantes" class="view">
+        <div class="module-stats" aria-label="Resumen de estudiantes">
+          <article class="module-stat"><span class="module-stat-icon">♧</span><small>ESTUDIANTES ACTIVOS</small><strong id="student-total">—</strong><p>Registrados en la institución</p></article>
+          <article class="module-stat"><span class="module-stat-icon">▤</span><small>PROGRAMAS ACADÉMICOS</small><strong id="student-programs">—</strong><p>Oferta universitaria</p></article>
+          <article class="module-stat"><span class="module-stat-icon">▣</span><small>PÁGINA ACTUAL</small><strong id="student-on-page">—</strong><p>Estudiantes mostrados</p></article>
+        </div>
+        <div class="surface-panel">
+          <div class="panel-head students-head">
+            <div><span class="eyebrow">REGISTRO INSTITUCIONAL</span><h2>Directorio de estudiantes</h2><p>Consulta y administra los registros activos.</p></div>
+            <button class="button button-primary" id="new-student-btn">＋ Nuevo estudiante</button>
+          </div>
+          <div class="table-toolbar">
+            <label class="search-field"><span>⌕</span><input id="student-search" type="search" autocomplete="off" placeholder="Buscar nombre, código o correo" aria-label="Buscar estudiantes"></label>
+            <label class="filter-field"><span>Programa</span><select id="student-program-filter"><option value="">Todos los programas</option></select></label>
+          </div>
+          <div class="table-scroller">
+            <table class="data-table">
+              <thead><tr><th>ESTUDIANTE</th><th>CÓDIGO</th><th>PROGRAMA</th><th>INGRESO</th><th>ACCIONES</th></tr></thead>
+              <tbody id="students-body"><tr><td colspan="5" class="empty-table">Inicia sesión para ver estudiantes.</td></tr></tbody>
+            </table>
+          </div>
+          <div class="table-footer">
+            <span id="students-count">0 registros</span>
+            <div class="pagination">
+              <button class="button button-outline button-small" id="prev-page">← Anterior</button>
+              <span id="page-indicator">Página 1 de 1</span>
+              <button class="button button-outline button-small" id="next-page">Siguiente →</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- DOCENTES -->
+      <section id="view-docentes" class="view">
+        <div class="module-stats" aria-label="Resumen de docentes">
+          <article class="module-stat">
+            <span class="module-stat-icon">♙</span><small>DOCENTES ACTIVOS</small>
+            <strong id="teacher-total">—</strong><p>Registrados en el sistema</p>
+          </article>
+          <article class="module-stat">
+            <span class="module-stat-icon">▦</span><small>GRUPOS ASIGNADOS</small>
+            <strong id="teacher-groups">—</strong><p>Grupos con docente responsable</p>
+          </article>
+          <article class="module-stat">
+            <span class="module-stat-icon">✓</span><small>VINCULACIONES</small>
+            <strong id="teacher-dated">—</strong><p>Docentes con fecha registrada</p>
+          </article>
+        </div>
+
+        <div class="surface-panel">
+          <div class="panel-head students-head">
+            <div><span class="eyebrow">REGISTRO INSTITUCIONAL</span><h2>Directorio de docentes</h2><p>Consulta y administra el personal docente activo.</p></div>
+            <button class="button button-primary" id="new-teacher-btn">＋ Nuevo docente</button>
+          </div>
+          <div class="table-toolbar">
+            <label class="search-field"><span>⌕</span><input id="teacher-search" type="search" autocomplete="off" placeholder="Buscar docente, documento o código" aria-label="Buscar docentes"></label>
+          </div>
+          <div class="table-scroller">
+            <table class="data-table">
+              <thead><tr><th>DOCENTE</th><th>CÓDIGO</th><th>DOCUMENTO</th><th>VINCULACIÓN</th><th>ACCIONES</th></tr></thead>
+              <tbody id="teachers-body"><tr><td colspan="5" class="empty-table">Inicia sesión para ver docentes.</td></tr></tbody>
+            </table>
+          </div>
+          <div class="table-footer"><span id="teachers-count">0 docentes activos</span></div>
+        </div>
+      </section>
+
+      <!-- GRUPOS ACADÉMICOS -->
+      <section id="view-grupos" class="view">
+        <div class="module-stats" aria-label="Resumen de grupos">
+          <article class="module-stat">
+            <span class="module-stat-icon">▦</span><small>TOTAL DE GRUPOS</small>
+            <strong id="group-total">—</strong><p>Grupos registrados</p>
+          </article>
+          <article class="module-stat">
+            <span class="module-stat-icon">✓</span><small>GRUPOS ABIERTOS</small>
+            <strong id="group-open">—</strong><p>Disponibles para matrícula</p>
+          </article>
+          <article class="module-stat">
+            <span class="module-stat-icon">▣</span><small>CAPACIDAD MÁXIMA</small>
+            <strong id="group-capacity">—</strong><p>Suma de cupos de todos los grupos</p>
+          </article>
+        </div>
+
+        <div class="surface-panel">
+          <div class="panel-head students-head">
+            <div><span class="eyebrow">GESTIÓN ACADÉMICA</span><h2>Directorio de grupos</h2><p>Administra docentes, períodos, estados y cupos.</p></div>
+            <button class="button button-primary" id="new-group-btn">＋ Nuevo grupo</button>
+          </div>
+          <div class="table-toolbar">
+            <label class="search-field"><span>⌕</span><input id="group-search" type="search" autocomplete="off" placeholder="Buscar código, asignatura o docente" aria-label="Buscar grupos"></label>
+            <label class="filter-field"><span>Estado</span>
+              <select id="group-status-filter">
+                <option value="">Todos los estados</option>
+                <option value="BORRADOR">Borrador</option>
+                <option value="ABIERTO">Abierto</option>
+                <option value="CERRADO">Cerrado</option>
+              </select>
+            </label>
+          </div>
+          <div class="table-scroller">
+            <table class="data-table groups-table">
+              <thead><tr><th>GRUPO</th><th>ASIGNATURA</th><th>DOCENTE</th><th>PERÍODO</th><th>CUPO</th><th>ESTADO</th><th>ACCIONES</th></tr></thead>
+              <tbody id="groups-body"><tr><td colspan="7" class="empty-table">Inicia sesión para consultar los grupos.</td></tr></tbody>
+            </table>
+          </div>
+          <div class="table-footer"><span id="groups-count">0 grupos académicos</span></div>
+        </div>
+      </section>
+
+      <!-- MATRÍCULAS ACADÉMICAS -->
+      <section id="view-matriculas" class="view">
+        <div class="module-stats" aria-label="Indicadores de matrículas del grupo">
+          <article class="module-stat"><span class="module-stat-icon">▣</span><small>MATRÍCULAS ACTIVAS</small><strong id="enroll-active">—</strong><p>Del grupo seleccionado</p></article>
+          <article class="module-stat"><span class="module-stat-icon">✓</span><small>CUPOS DISPONIBLES</small><strong id="enroll-free">—</strong><p>Capacidad restante</p></article>
+          <article class="module-stat"><span class="module-stat-icon">◈</span><small>OCUPACIÓN</small><strong id="enroll-percent">—</strong><p>Porcentaje del cupo utilizado</p></article>
+        </div>
+        <div class="surface-panel">
+          <div class="panel-head students-head">
+            <div><span class="eyebrow">INSCRIPCIONES ACADÉMICAS</span><h2>Directorio de matrículas</h2><p>Consulta inscripciones, estados y cupos disponibles.</p></div>
+            <button class="button button-primary" id="new-enrollment-btn">＋ Nueva matrícula</button>
+          </div>
+          <div class="table-toolbar">
+            <label class="filter-field"><span>Grupo</span>
+              <select id="enrollment-group-filter" aria-label="Filtrar matrículas por grupo">
+                <option value="">Selecciona un grupo</option>
+              </select>
+            </label>
+            <label class="filter-field"><span>Estado</span>
+              <select id="enrollment-status-filter" aria-label="Filtrar matrículas por estado">
+                <option value="">Todos los estados</option>
+                <option value="ACTIVA">Activa</option>
+                <option value="RETIRADA">Retirada</option>
+                <option value="FINALIZADA">Finalizada</option>
+              </select>
+            </label>
+          </div>
+          <div class="table-scroller">
+            <table class="data-table">
+              <thead><tr><th>MATRÍCULA</th><th>ESTUDIANTE</th><th>CÓDIGO</th><th>GRUPO</th><th>FECHA</th><th>ESTADO</th><th>ACCIONES</th></tr></thead>
+              <tbody id="enrollments-body"><tr><td colspan="7" class="empty-table">Selecciona un grupo para consultar sus matrículas.</td></tr></tbody>
+            </table>
+          </div>
+          <div class="table-footer">
+            <span id="enrollments-count">0 matrículas</span>
+            <span id="enrollment-capacity">Selecciona un grupo para ver los cupos</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROGRAMAS -->
+      <section id="view-programas" class="view">
+        <div class="module-stats program-stats" aria-label="Resumen de oferta académica">
+          <article class="module-stat"><span class="module-stat-icon">▤</span><small>PROGRAMAS</small><strong id="program-total">—</strong><p>Programas del catálogo institucional</p></article>
+          <article class="module-stat"><span class="module-stat-icon">▧</span><small>ASIGNATURAS</small><strong id="program-subjects">—</strong><p>Materias disponibles para consulta</p></article>
+          <article class="module-stat program-action"><span class="module-stat-icon">↗</span><small>PLANES DE ESTUDIO</small><strong>Catálogo</strong><button class="text-action" data-go="asignaturas">Explorar asignaturas ↗</button></article>
+        </div>
+        <div class="module-intro">
+          <span class="intro-icon">▤</span>
+          <div><small>EXPLORA TU INSTITUCIÓN</small><h2>Oferta académica universitaria</h2><p>Programas formativos registrados, conectados con la información institucional.</p></div>
+          <div class="intro-number"><strong id="program-total-intro">—</strong><small>PROGRAMAS</small></div>
+        </div>
+        <div class="surface-panel">
+          <div class="panel-head">
+            <div><span class="eyebrow">OFERTA INSTITUCIONAL</span><h2>Programas académicos</h2><p>Catálogo de carreras disponibles registrado en PostgreSQL.</p></div>
+            <span class="read-only-label">Solo consulta</span>
+          </div>
+          <div id="programs-list" class="catalog-grid"><div class="empty-catalog">Cargando programas...</div></div>
+        </div>
+      </section>
+
+      <!-- ASIGNATURAS -->
+      <section id="view-asignaturas" class="view">
+        <div class="stats-grid subject-stats" aria-label="Resumen de asignaturas">
+          <article class="stat-card subject-stat subject-stat-gold">
+            <div class="stat-top"><span class="stat-icon icon-amber">▧</span><span class="stat-accent">CATÁLOGO</span></div>
+            <strong id="subject-total">—</strong><span>Total asignaturas</span><small>Materias disponibles en el sistema</small>
+          </article>
+          <article class="stat-card subject-stat subject-stat-blue">
+            <div class="stat-top"><span class="stat-icon icon-blue">◈</span><span class="stat-accent">CRÉDITOS</span></div>
+            <strong id="subject-average">—</strong><span>Créditos promedio</span><small>Promedio por asignatura</small>
+          </article>
+          <article class="stat-card subject-stat subject-stat-green">
+            <div class="stat-top"><span class="stat-icon icon-purple">✓</span><span class="stat-accent">OFERTA</span></div>
+            <strong id="subject-active">—</strong><span>Asignaturas disponibles</span><small>Registros del catálogo consultable</small>
+          </article>
+        </div>
+        <div class="surface-panel subject-panel">
+          <div class="panel-head students-head">
+            <div><span class="eyebrow">PLANES DE ESTUDIO</span><h2>Directorio de asignaturas</h2><p>Explora materias y créditos de la oferta académica.</p></div>
+            <span class="read-only-label">Solo consulta</span>
+          </div>
+          <div class="table-toolbar">
+            <label class="search-field"><span aria-hidden="true">⌕</span><input id="subject-search" type="search" autocomplete="off" placeholder="Buscar asignatura por nombre o código" aria-label="Buscar asignaturas"></label>
+            <span class="read-only-label">Catálogo institucional</span>
+          </div>
+          <div class="table-scroller">
+            <table class="data-table subject-table">
+              <thead><tr><th>ASIGNATURA</th><th>CÓDIGO</th><th>CRÉDITOS</th><th>DISPONIBILIDAD</th></tr></thead>
+              <tbody id="subjects-body"><tr><td colspan="4" class="empty-table">Cargando asignaturas...</td></tr></tbody>
+            </table>
+          </div>
+          <div class="table-footer">
+            <span id="subjects-count">Consulta del catálogo académico</span>
+            <span class="read-only-label">Datos de PostgreSQL</span>
+          </div>
+        </div>
+      </section>
+      <!-- ETAPA 8: EVALUACIONES Y CALIFICACIONES -->
+      <section id="view-evaluaciones" class="view">
+        <div class="module-intro grade-hero">
+          <span class="intro-icon">◇</span>
+          <div><small>ETAPA 8 · GESTIÓN ACADÉMICA</small><h2>Evaluaciones y calificaciones</h2><p>Crea actividades, registra notas y consulta definitivas ponderadas.</p></div>
+        </div>
+        <div class="module-stats">
+          <article class="module-stat"><span class="module-stat-icon">▦</span><small>EVALUACIONES</small><strong id="grade-total">—</strong><p>Del grupo seleccionado</p></article>
+          <article class="module-stat"><span class="module-stat-icon">◈</span><small>PONDERACIÓN TOTAL</small><strong id="grade-weight">—</strong><p>Máximo permitido: 100 %</p></article>
+          <article class="module-stat"><span class="module-stat-icon">✓</span><small>PUBLICADAS</small><strong id="grade-published">—</strong><p>Evaluaciones publicadas</p></article>
+        </div>
+        <section class="surface-panel">
+          <div class="panel-head students-head">
+            <div><span class="eyebrow">PLAN DE EVALUACIÓN</span><h2>Evaluaciones del grupo</h2><p>Las ponderaciones no pueden superar el 100 %.</p></div>
+            <button class="button button-primary" id="new-eval-btn">＋ Nueva evaluación</button>
+          </div>
+          <div class="table-toolbar">
+            <label class="filter-field"><span>Grupo académico</span><select id="grade-group"><option value="">Selecciona un grupo</option></select></label>
+          </div>
+          <div class="table-scroller"><table class="data-table">
+            <thead><tr><th>ACTIVIDAD</th><th>PONDERACIÓN</th><th>FECHA</th><th>ESTADO</th><th>ACCIONES</th></tr></thead>
+            <tbody id="evaluations-body"><tr><td colspan="5" class="empty-table">Selecciona un grupo para consultar evaluaciones.</td></tr></tbody>
+          </table></div>
+          <div class="table-footer"><span id="evaluations-count">0 evaluaciones</span><span class="read-only-label">Datos de PostgreSQL</span></div>
+        </section>
+        <div class="grade-layout">
+          <section class="surface-panel">
+            <div class="panel-head"><div><span class="eyebrow">REGISTRO DE NOTAS</span><h2>Libro de calificaciones</h2><p>Selecciona una evaluación y registra las notas de 0,00 a 5,00.</p></div></div>
+            <div class="table-toolbar"><label class="filter-field"><span>Evaluación</span><select id="grade-eval"><option value="">Selecciona una evaluación</option></select></label></div>
+            <div class="table-scroller"><table class="data-table"><thead><tr><th>ESTUDIANTE</th><th>ESTADO</th><th>NOTA</th><th>ACCIÓN</th></tr></thead>
+              <tbody id="grades-body"><tr><td colspan="4" class="empty-table">Selecciona una evaluación.</td></tr></tbody>
+            </table></div>
+          </section>
+          <section class="surface-panel final-panel">
+            <div class="panel-head"><div><span class="eyebrow">CIERRE ACADÉMICO</span><h2>Notas definitivas</h2><p>Se calculan al publicar el 100 % y registrar todas las notas.</p></div></div>
+            <div id="finals-list" class="finals-list"><p class="empty-catalog">Selecciona un grupo para ver las definitivas.</p></div>
+          </section>
+        </div>
+      </section>
+      <!-- ETAPA 9: REPORTES ACADÉMICOS Y BOLETINES -->
+      <section id="view-reportes" class="view">
+        <div class="module-intro report-hero">
+          <span class="intro-icon">▤</span>
+          <div><small>ETAPA 9 · CONSULTAS ACADÉMICAS</small>
+            <h2>Reportes y boletines</h2>
+            <p>Consulta resultados académicos, exporta CSV e imprime boletines.</p>
+          </div>
+        </div>
+        <div class="module-stats" aria-label="Resumen del grupo">
+          <article class="module-stat"><span class="module-stat-icon">♧</span><small>ESTUDIANTES DEL GRUPO</small><strong id="report-total">—</strong><p>Matrículas activas</p></article>
+          <article class="module-stat"><span class="module-stat-icon">✓</span><small>NOTAS DEFINITIVAS</small><strong id="report-complete">—</strong><p>Calificaciones completas</p></article>
+          <article class="module-stat"><span class="module-stat-icon">◈</span><small>PROMEDIO DEL GRUPO</small><strong id="report-average">—</strong><p>Solo definitivas completas</p></article>
+        </div>
+
+        <section class="surface-panel report-panel">
+          <div class="panel-head students-head">
+            <div><span class="eyebrow">CONSOLIDADO POR GRUPO</span><h2>Reporte de calificaciones</h2>
+              <p>Consulta las evaluaciones y la definitiva de cada matrícula activa.</p></div>
+            <div class="report-actions">
+              <button type="button" id="report-group-csv" class="button button-outline" disabled>↓ Exportar CSV</button>
+              <button type="button" id="report-group-print" class="button button-primary" disabled>▤ Imprimir / PDF</button>
+            </div>
+          </div>
+          <div class="table-toolbar">
+            <label class="filter-field"><span>Grupo académico</span>
+              <select id="report-group"><option value="">Selecciona un grupo</option></select>
+            </label>
+            <span id="report-group-caption" class="read-only-label">Selecciona un grupo para consultar.</span>
+          </div>
+          <div class="table-scroller">
+            <table class="data-table report-table">
+              <thead id="report-group-head"><tr><th>ESTUDIANTE</th><th>ESTADO</th><th>DEFINITIVA</th><th>RESULTADO</th></tr></thead>
+              <tbody id="report-group-body"><tr><td colspan="4" class="empty-table">Selecciona un grupo académico.</td></tr></tbody>
+            </table>
+          </div>
+          <div class="table-footer"><span id="report-group-footer">Sin reporte seleccionado</span>
+            <span class="read-only-label">Ponderación total y publicación obligatorias</span></div>
+        </section>
+
+        <section class="surface-panel report-panel report-boletin-panel">
+          <div class="panel-head students-head">
+            <div><span class="eyebrow">CONSULTA INDIVIDUAL</span><h2>Boletín académico</h2>
+              <p>Resultados por estudiante y período. Las notas incompletas se muestran pendientes.</p></div>
+            <div class="report-actions">
+              <button type="button" id="report-student-csv" class="button button-outline" disabled>↓ Exportar CSV</button>
+              <button type="button" id="report-student-print" class="button button-primary" disabled>▤ Imprimir / PDF</button>
+            </div>
+          </div>
+          <div class="table-toolbar report-filter-bar">
+            <label class="filter-field"><span>Período académico</span>
+              <select id="report-period"><option value="">Selecciona un período</option></select>
+            </label>
+            <label class="filter-field"><span>Estudiante matriculado</span>
+              <select id="report-student" disabled><option value="">Selecciona un estudiante</option></select>
+            </label>
+          </div>
+          <div id="report-student-info" class="report-student-info" hidden></div>
+          <div class="table-scroller">
+            <table class="data-table report-table">
+              <thead><tr><th>ASIGNATURA Y EVALUACIONES</th><th>GRUPO</th><th>CRÉDITOS</th><th>DEFINITIVA</th><th>RESULTADO</th></tr></thead>
+              <tbody id="report-student-body"><tr><td colspan="5" class="empty-table">Selecciona un período y un estudiante para generar su boletín.</td></tr></tbody>
+            </table>
+          </div>
+          <div class="table-footer"><span id="report-student-footer">Boletín de solo lectura</span>
+            <span class="read-only-label">Matrículas activas o finalizadas</span></div>
+        </section>
+        <p class="report-disclaimer">Documento informativo de demostración. No sustituye una certificación académica oficial.</p>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- Área de impresión: contenido generado sin datos adicionales ni solicitudes externas. -->
+<section id="report-print-sheet" class="report-print-sheet" hidden></section>
+
+<!-- INICIO DE SESIÓN -->
+<div class="overlay" id="login-overlay" role="dialog" aria-modal="true" aria-labelledby="login-title">
+  <div class="login-card">
+    <img class="login-logo" src="./img/logo-unigest.png" alt="Logo UniGest">
+    <span class="eyebrow">ACCESO INSTITUCIONAL</span>
+    <h2 id="login-title">Bienvenido a UniGest</h2>
+    <p>Ingresa con tu correo institucional. Los docentes y estudiantes serán dirigidos a su espacio personal.</p>
+    <form id="login-form" autocomplete="on">
+      <label for="login-user">Correo electrónico</label>
+      <input id="login-user" name="username" type="email" autocomplete="username" placeholder="admin@unigest.local" required>
+      <label for="login-password">Contraseña</label>
+      <input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Ingresa tu contraseña" required>
+      <p class="form-error" id="login-error" role="alert" hidden></p>
+      <button class="button button-primary button-wide" id="login-submit" type="submit">Entrar al panel →</button>
+    </form>
+    <div class="login-note"><span class="status-dot"></span> Entorno local de desarrollo · Utiliza datos ficticios</div>
+  </div>
+</div>
+
+<!-- FORMULARIO DE ESTUDIANTES -->
+<div class="modal-backdrop" id="student-modal" hidden>
+  <section class="form-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <header class="modal-header">
+      <div><span class="eyebrow">MÓDULO DE ESTUDIANTES</span><h2 id="modal-title">Nuevo estudiante</h2><p>Completa los datos académicos del estudiante ficticio.</p></div>
+      <button class="icon-button" id="modal-close" type="button" aria-label="Cerrar formulario">×</button>
+    </header>
+    <form id="student-form">
+      <div class="form-grid">
+        <label>Nombres <span>*</span><input name="nombres" type="text" maxlength="100" required placeholder="Ej. Ana María"></label>
+        <label>Apellidos <span>*</span><input name="apellidos" type="text" maxlength="100" required placeholder="Ej. Pérez"></label>
+        <label>Correo electrónico <span>*</span><input name="correo" type="email" maxlength="180" required placeholder="estudiante@example.com"></label>
+        <label>Documento <span>*</span><input name="documento" type="text" maxlength="30" required placeholder="Ej. FICTICIO-001"></label>
+        <label>Código universitario <span>*</span><input name="codigo" type="text" maxlength="30" required placeholder="Ej. UNI-0001"></label>
+        <label>Programa académico <span>*</span><select name="programaId" id="student-form-program" required><option value="">Selecciona un programa</option></select></label>
+        <label>Fecha de ingreso <span>*</span><input name="fechaIngreso" type="date" required></label>
+      </div>
+      <p class="form-help" id="date-help">Utiliza únicamente información ficticia.</p>
+      <p class="form-error" id="student-form-error" role="alert" hidden></p>
+      <footer class="modal-actions">
+        <button type="button" class="button button-outline" id="form-cancel">Cancelar</button>
+        <button type="submit" class="button button-primary" id="form-submit">Guardar estudiante</button>
+      </footer>
+    </form>
+  </section>
+</div>
+
+<!-- FORMULARIO DE DOCENTES -->
+<div class="modal-backdrop" id="teacher-modal" hidden>
+  <section class="form-modal" role="dialog" aria-modal="true" aria-labelledby="teacher-modal-title">
+    <header class="modal-header">
+      <div><span class="eyebrow">MÓDULO DE DOCENTES</span><h2 id="teacher-modal-title">Nuevo docente</h2><p>Utiliza únicamente información ficticia para las pruebas.</p></div>
+      <button class="icon-button" id="teacher-modal-close" type="button" aria-label="Cerrar formulario docente">×</button>
+    </header>
+    <form id="teacher-form">
+      <div class="form-grid">
+        <label>Nombres <span>*</span><input name="nombres" type="text" maxlength="100" required placeholder="Ej. Laura"></label>
+        <label>Apellidos <span>*</span><input name="apellidos" type="text" maxlength="100" required placeholder="Ej. Martínez"></label>
+        <label>Correo electrónico <span>*</span><input name="correo" type="email" maxlength="180" required placeholder="docente@example.com"></label>
+        <label>Documento <span>*</span><input name="documento" type="text" maxlength="30" required placeholder="Ej. FICTICIO-DOC-002"></label>
+        <label>Código institucional <span>*</span><input name="codigo" type="text" maxlength="30" required placeholder="Ej. DOC-002"></label>
+        <label>Fecha de vinculación <span>*</span><input name="fechaVinculacion" type="date" required></label>
+      </div>
+      <p class="form-help" id="teacher-date-help">La fecha de vinculación no podrá modificarse después del registro.</p>
+      <p class="form-error" id="teacher-form-error" role="alert" hidden></p>
+      <footer class="modal-actions">
+        <button type="button" class="button button-outline" id="teacher-form-cancel">Cancelar</button>
+        <button type="submit" class="button button-primary" id="teacher-form-submit">Guardar docente</button>
+      </footer>
+    </form>
+  </section>
+</div>
+
+<!-- FORMULARIO DE GRUPOS -->
+<div class="modal-backdrop" id="group-modal" hidden>
+  <section class="form-modal group-form-modal" role="dialog" aria-modal="true" aria-labelledby="group-modal-title">
+    <header class="modal-header">
+      <div><span class="eyebrow">MÓDULO DE GRUPOS ACADÉMICOS</span><h2 id="group-modal-title">Nuevo grupo académico</h2><p>Organiza asignaturas, docentes y períodos académicos.</p></div>
+      <button class="icon-button" id="group-modal-close" type="button" aria-label="Cerrar formulario">×</button>
+    </header>
+    <form id="group-form">
+      <div class="form-grid">
+        <label>Asignatura <span>*</span><select name="asignaturaId" id="group-subject" required><option value="">Selecciona una asignatura</option></select></label>
+        <label>Docente responsable <span>*</span><select name="docenteId" id="group-teacher" required><option value="">Selecciona un docente</option></select></label>
+        <label>Período académico <span>*</span><select name="periodoId" id="group-period" required><option value="">Selecciona un período</option></select></label>
+        <label>Código del grupo <span>*</span><input name="codigo" type="text" maxlength="15" required placeholder="Ej. PROG101-G03"></label>
+        <label>Cupo máximo <span>*</span><input name="cupo" type="number" min="1" max="1000" step="1" required placeholder="Ej. 35"></label>
+      </div>
+      <p class="form-help" id="group-form-help">El grupo nuevo se registrará en BORRADOR. Los cambios de estado se realizan desde el directorio.</p>
+      <p class="form-error" id="group-form-error" role="alert" hidden></p>
+      <footer class="modal-actions">
+        <button type="button" class="button button-outline" id="group-form-cancel">Cancelar</button>
+        <button type="submit" class="button button-primary" id="group-form-submit">Guardar grupo</button>
+      </footer>
+    </form>
+  </section>
+</div>
+
+<!-- FORMULARIO DE MATRÍCULAS -->
+<div class="modal-backdrop" id="enrollment-modal" hidden>
+  <section class="form-modal" role="dialog" aria-modal="true" aria-labelledby="enrollment-modal-title">
+    <header class="modal-header">
+      <div><span class="eyebrow">MÓDULO DE MATRÍCULAS</span><h2 id="enrollment-modal-title">Nueva matrícula académica</h2><p>Selecciona un estudiante activo y un grupo abierto.</p></div>
+      <button class="icon-button" id="enrollment-modal-close" type="button" aria-label="Cerrar formulario de matrícula">×</button>
+    </header>
+    <form id="enrollment-form">
+      <div class="form-grid">
+        <label>Estudiante <span>*</span><select name="estudianteId" id="enrollment-student" required><option value="">Selecciona un estudiante</option></select></label>
+        <label>Grupo académico <span>*</span><select name="grupoId" id="enrollment-group" required><option value="">Selecciona un grupo abierto</option></select></label>
+      </div>
+      <p class="form-help" id="enrollment-form-help">El sistema comprobará disponibilidad, duplicados y estado del grupo antes de matricular.</p>
+      <p class="form-error" id="enrollment-form-error" role="alert" hidden></p>
+      <footer class="modal-actions">
+        <button type="button" class="button button-outline" id="enrollment-form-cancel">Cancelar</button>
+        <button type="submit" class="button button-primary" id="enrollment-form-submit">Registrar matrícula</button>
+      </footer>
+    </form>
+  </section>
+</div>
+
+<!-- FICHA DEL DOCENTE -->
+<div class="modal-backdrop" id="teacher-profile-modal" hidden>
+  <section class="form-modal profile-dialog" role="dialog" aria-modal="true" aria-labelledby="profile-name">
+    <header class="modal-header"><div><span class="eyebrow">PERSONAL DOCENTE</span><h2 id="profile-name">Ficha institucional</h2><p>Información del registro académico</p></div>
+      <button class="icon-button" id="profile-close" type="button" aria-label="Cerrar ficha">×</button></header>
+    <div id="profile-details" class="profile-details"></div>
+  </section>
+</div>
+<!-- NUEVA / EDITAR EVALUACIÓN -->
+<div class="modal-backdrop" id="eval-modal" hidden>
+  <section class="form-modal" role="dialog" aria-modal="true" aria-labelledby="eval-modal-title">
+    <header class="modal-header"><div><span class="eyebrow">ETAPA 8 · EVALUACIONES</span><h2 id="eval-modal-title">Nueva evaluación</h2><p>Asigna una actividad y su ponderación.</p></div>
+      <button class="icon-button" type="button" id="eval-close" aria-label="Cerrar">×</button></header>
+    <form id="eval-form">
+      <div class="form-grid">
+        <label>Actividad <span>*</span><input name="titulo" maxlength="150" required placeholder="Ej. Parcial 1"></label>
+        <label>Ponderación (%) <span>*</span><input name="ponderacion" type="number" min="0.01" max="100" step="0.01" required></label>
+        <label>Fecha de evaluación<input name="fecha" type="date"></label>
+      </div>
+      <p class="form-help">El grupo se toma del selector de Evaluaciones.</p>
+      <p class="form-error" id="eval-error" role="alert" hidden></p>
+      <footer class="modal-actions"><button type="button" id="eval-cancel" class="button button-outline">Cancelar</button>
+        <button class="button button-primary" type="submit" id="eval-submit">Guardar evaluación</button></footer>
+    </form>
+  </section>
+</div>
+<!-- CALIFICACIÓN -->
+<div class="modal-backdrop" id="grade-modal" hidden>
+  <section class="form-modal" role="dialog" aria-modal="true" aria-labelledby="grade-modal-title">
+    <header class="modal-header"><div><span class="eyebrow">ETAPA 8 · NOTAS</span><h2 id="grade-modal-title">Calificar estudiante</h2><p>Las correcciones requieren un motivo y quedan auditadas.</p></div>
+      <button class="icon-button" type="button" id="grade-close" aria-label="Cerrar">×</button></header>
+    <form id="grade-form">
+      <div class="form-grid">
+        <label>Nota (0 a 5) <span>*</span><input name="nota" type="number" min="0" max="5" step="0.01" required></label>
+        <label>Motivo del cambio<input name="motivo" maxlength="255" placeholder="Obligatorio al corregir"></label>
+      </div>
+      <p class="form-error" id="grade-error" role="alert" hidden></p>
+      <footer class="modal-actions"><button type="button" id="grade-cancel" class="button button-outline">Cancelar</button>
+        <button class="button button-primary" type="submit" id="grade-submit">Guardar nota</button></footer>
+    </form>
+  </section>
+</div>
+
+<!-- ETAPA 10 · CONTRASEÑA TEMPORAL: SE MUESTRA UNA ÚNICA VEZ -->
+<div class="modal-backdrop" id="credential-modal" hidden>
+  <section class="form-modal" role="dialog" aria-modal="true" aria-labelledby="credential-title">
+    <header class="modal-header">
+      <div><span class="eyebrow">ACCESO INSTITUCIONAL</span>
+        <h2 id="credential-title">Credencial temporal emitida</h2>
+        <p>Esta contraseña se muestra solo ahora. Entrégala de forma privada.</p>
+      </div>
+      <button class="icon-button" id="credential-close" type="button" aria-label="Cerrar">×</button>
+    </header>
+    <div class="access-credential">
+      <p>Correo: <strong id="credential-user"></strong></p>
+      <p>Contraseña temporal:</p>
+      <code id="credential-password" class="access-secret"></code>
+      <p class="form-help">La persona deberá cambiar la contraseña antes de consultar sus datos.</p>
+    </div>
+    <footer class="modal-actions">
+      <button type="button" id="credential-copy" class="button button-primary">Copiar contraseña</button>
+      <button type="button" class="button button-outline" id="credential-cancel">Cerrar</button>
+    </footer>
+  </section>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

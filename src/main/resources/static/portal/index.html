@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>Mi espacio · UniGest</title>
+  <link rel="stylesheet" href="./css/app.css">
+  <script src="./js/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><img src="/panel/img/logo-unigest.png" alt="Logo UniGest"><div><b>UniGest</b><small>PORTAL ACADÉMICO</small></div></div>
+    <div class="account"><span id="identity">Sin sesión</span><button id="logout" type="button" hidden>Cerrar sesión</button></div>
+  </header>
+  <main>
+    <section class="hero"><span class="eyebrow">ACCESO PERSONALIZADO</span><h1 id="title">Mi espacio académico</h1><p id="subtitle">Tu información universitaria en un solo lugar.</p></section>
+    <p id="notice" role="alert" class="notice" hidden></p>
+    <section class="card" id="login-card" hidden>
+      <span class="eyebrow">INICIAR SESIÓN</span><h2>Accede a UniGest</h2>
+      <form id="login-form" class="form-grid">
+        <label>Correo institucional<input name="username" type="email" autocomplete="username" required></label>
+        <label>Contraseña<input name="password" type="password" autocomplete="current-password" required></label>
+        <button class="primary" type="submit">Iniciar sesión</button>
+      </form>
+    </section>
+    <section class="card" id="password-card" hidden>
+      <span class="eyebrow">PROTEGE TU CUENTA</span><h2>Cambia tu contraseña temporal</h2>
+      <p>Debes establecer una contraseña personal antes de consultar información académica. Usa una contraseña única de al menos 12 caracteres.</p>
+      <form id="password-form" class="form-grid">
+        <label>Contraseña temporal / actual<input name="actual" type="password" autocomplete="current-password" required></label>
+        <label>Contraseña nueva<input name="nueva" type="password" autocomplete="new-password" minlength="12" required></label>
+        <button class="primary" type="submit">Guardar contraseña nueva</button>
+      </form>
+    </section>
+    <section id="teacher" hidden>
+      <div class="card">
+        <div class="section-head"><div><span class="eyebrow">MI DOCENCIA</span><h2>Grupos asignados</h2><p>Solo puedes consultar y calificar los grupos a tu cargo.</p></div><button id="teacher-refresh">Actualizar</button></div>
+        <label class="select-label">Grupo académico<select id="teacher-group"><option value="">Selecciona un grupo</option></select></label>
+        <div id="teacher-summary" class="muted">Selecciona un grupo.</div>
+      </div>
+      <div class="split">
+        <section class="card">
+          <div class="section-head"><div><span class="eyebrow">EVALUACIONES</span><h2>Plan de evaluación</h2></div><button class="primary" id="new-eval" disabled>Nueva evaluación</button></div>
+          <div class="table-wrap"><table><thead><tr><th>Actividad</th><th>Peso</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="eval-rows"><tr><td colspan="4">Selecciona un grupo.</td></tr></tbody></table></div>
+        </section>
+        <section class="card">
+          <span class="eyebrow">LIBRO DE NOTAS</span><h2>Calificaciones</h2>
+          <label class="select-label">Evaluación<select id="teacher-eval"><option value="">Selecciona una evaluación</option></select></label>
+          <div class="table-wrap"><table><thead><tr><th>Estudiante</th><th>Nota</th><th>Acción</th></tr></thead><tbody id="grade-rows"><tr><td colspan="3">Selecciona una evaluación.</td></tr></tbody></table></div>
+        </section>
+      </div>
+      <section class="card"><span class="eyebrow">CONSOLIDADO</span><h2>Definitivas del grupo</h2><div id="teacher-report" class="muted">Selecciona un grupo.</div></section>
+    </section>
+    <section id="student" hidden>
+      <div class="card">
+        <span class="eyebrow">MIS ESTUDIOS</span><h2>Mi boletín académico</h2>
+        <p>Consulta tus materias, notas publicadas y definitivas. Ningún estudiante puede consultar el expediente de otro.</p>
+        <label class="select-label">Período académico<select id="student-period"><option value="">Selecciona un período</option></select></label>
+        <div id="student-summary"></div>
+        <div id="student-report"></div>
+        <button id="student-print" type="button" hidden>Imprimir / guardar PDF</button>
+      </div>
+    </section>
+  </main>
+  <dialog id="grade-dialog"><form method="dialog" id="grade-form"><h2 id="grade-title">Calificar</h2>
+    <label>Nota (0,00 a 5,00)<input name="nota" type="number" step="0.01" min="0" max="5" required></label>
+    <label>Motivo (obligatorio al corregir)<textarea name="motivo" maxlength="255" rows="3"></textarea></label>
+    <div class="dialog-actions"><button type="button" data-close-dialog>Cancelar</button><button class="primary" type="submit">Guardar nota</button></div></form></dialog>
+  <dialog id="eval-dialog"><form method="dialog" id="eval-form"><h2 id="eval-title">Nueva evaluación</h2>
+    <label>Actividad<input name="titulo" maxlength="150" required></label>
+    <label>Ponderación (%)<input name="ponderacion" type="number" min="0.01" max="100" step="0.01" required></label>
+    <label>Fecha<input name="fecha" type="date"></label>
+    <div class="dialog-actions"><button type="button" data-close-dialog>Cancelar</button><button class="primary" type="submit">Guardar evaluación</button></div></form></dialog>
+</body>
+</html>

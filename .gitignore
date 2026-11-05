@@ -1,0 +1,55 @@
+# Compilación Maven
+/target/
+*.class
+*.jar
+*.war
+
+# Configuración de IDE
+/.idea/
+/.settings/
+/.classpath
+/.project
+.vscode/
+*.iml
+
+# Variables de entorno
+.env
+.env.*
+!.env.example
+
+# Configuración local y secretos
+application-local.yml
+application-secrets.yml
+application-local.properties
+application-secrets.properties
+
+# Credenciales y certificados privados
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+
+# Respaldos y archivos comprimidos
+*.backup
+*.dump
+*.bak
+*.zip
+*.rar
+*.7z
+
+# Registros
+*.log
+logs/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos temporales
+*.tmp
+*.temp
+*~
+
+/archive/
