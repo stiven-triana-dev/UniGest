@@ -14,7 +14,6 @@ if ([string]::IsNullOrEmpty($env:DB_PASSWORD)) {
 }
 
 $posiblesMaven = @(
-    'C:\Users\stive\Tools\apache-maven-3.10.0\bin\mvn.cmd',
     'mvn.cmd',
     'mvn'
 )
