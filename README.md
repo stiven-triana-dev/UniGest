@@ -10,8 +10,15 @@
 
 **Versión:** `v0.11.0` · **Pruebas:** 92 automatizadas, 0 fallos · **CI:** GitHub Actions con Java 21 y PostgreSQL 18
 
-<!-- Agrega aquí 2 o 3 capturas: docs/img/panel.png, docs/img/portal-docente.png, docs/img/boletin.png -->
-<!-- ![Panel administrativo](docs/img/panel.png) -->
+## 🖼️ Capturas
+
+| Panel administrativo | Grupos académicos |
+| --- | --- |
+| ![Panel administrativo](docs/img/panel.png) | ![Grupos académicos](docs/img/grupos.png) |
+
+| Portal docente | Boletín del estudiante |
+| --- | --- |
+| ![Portal docente](docs/img/portal-docente.png) | ![Boletín del estudiante](docs/img/boletin.png) |
 
 ## ✨ Funcionalidades
 
