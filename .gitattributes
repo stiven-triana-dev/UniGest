@@ -1,0 +1,7 @@
+# Normaliza los saltos de línea para evitar archivos "modificados" por CRLF/LF
+* text=auto
+
+*.sh text eol=lf
+*.ps1 text eol=crlf
+*.png binary
+*.jpg binary
