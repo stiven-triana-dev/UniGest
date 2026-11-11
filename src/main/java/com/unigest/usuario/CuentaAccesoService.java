@@ -21,6 +21,15 @@ public class CuentaAccesoService {
         this.encoder = encoder;
     }
 
+
+    // Demo pública: protege las cuentas de prueba. Opcional para las pruebas unitarias.
+    private com.unigest.demo.DemoModo demo;
+
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    void setDemo(com.unigest.demo.DemoModo demo) { this.demo = demo; }
+
+    private void protegerDemo(String correo) { if (demo != null) demo.protegerCuenta(correo); }
+
     public record CredencialTemporal(String correo, String claveTemporal) { }
     public record EstadoClave(boolean requiereCambio) { }
 
@@ -34,6 +43,7 @@ public class CuentaAccesoService {
             "DOCENTE".equals(r.getCodigo()) || "ESTUDIANTE".equals(r.getCodigo()));
         boolean administrador = u.obtenerRoles().stream().anyMatch(r ->
             "ADMIN".equals(r.getCodigo()));
+        protegerDemo(u.getCorreo());
         if (!academico || administrador) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "Esta operación solo está disponible para docentes y estudiantes");
@@ -59,6 +69,7 @@ public class CuentaAccesoService {
     @Transactional
     public void cambiar(String correo, String actual, String nueva) {
         Usuario u = buscarActivo(correo);
+        protegerDemo(u.getCorreo());
         if (!encoder.matches(actual, obtenerHash(u))) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                 "La contraseña actual no coincide");

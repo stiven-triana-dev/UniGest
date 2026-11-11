@@ -53,6 +53,7 @@ public class SecurityConfig {
                         "/api/v1/programas",
                         "/api/v1/asignaturas",
                         "/api/v1/auth/csrf",
+                        "/api/v1/demo",
                         "/panel/**",
                         "/portal/**"
                 ).permitAll()

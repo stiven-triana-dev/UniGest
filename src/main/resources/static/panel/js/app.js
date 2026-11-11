@@ -2042,6 +2042,41 @@
     });
   }
 
+  // DEMO PÚBLICA: muestra las cuentas de prueba y entra con un clic.
+  async function demoAccess() {
+    try {
+      const res = await fetch(`${API}/demo`, {credentials:'same-origin'});
+      if (!res.ok) return;
+      const demo = await res.json();
+      if (!demo.activo) return;
+      $('demo-password').textContent = demo.clave;
+      const buttons = $('demo-buttons');
+      buttons.replaceChildren(...demo.cuentas.map(cuenta => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'demo-button';
+        const rol = document.createElement('strong');
+        rol.textContent = cuenta.rol;
+        const correo = document.createElement('small');
+        correo.textContent = cuenta.correo;
+        b.append(rol, correo);
+        b.addEventListener('click', () => {
+          $('login-user').value = cuenta.correo;
+          $('login-password').value = demo.clave;
+          $('login-form').requestSubmit();
+        });
+        return b;
+      }));
+      $('demo-access').hidden = false;
+      $('login-note').lastChild.textContent = ' Demo pública · Datos ficticios';
+      $('env-title').textContent = 'Demo pública';
+      $('env-detail').textContent = 'Datos ficticios que se reinician';
+      $('env-badge').textContent = 'Demo';
+      $('env-notice').textContent = 'Demo pública: los datos son ficticios y se reinician automáticamente.';
+    } catch { /* sin demo: se deja el inicio de sesión normal */ }
+  }
+
   bind();
   restore();
+  demoAccess();
 })();

@@ -104,4 +104,16 @@ class CuentaAccesoServiceTest {
         assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
         verifyNoInteractions(encoder);
     }
+
+    @Test void enLaDemoNoSeCambiaLaClaveDeUnaCuentaDePrueba() {
+        servicio.setDemo(new com.unigest.demo.DemoModo(true, "Demo-UniGest-2026"));
+        Usuario u = mock(Usuario.class);
+        when(repo.findByCorreoIgnoreCase("estudiante@demo.test")).thenReturn(Optional.of(u));
+        when(u.isActivo()).thenReturn(true);
+        when(u.getCorreo()).thenReturn("estudiante@demo.test");
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class,
+            () -> servicio.cambiar("estudiante@demo.test", "Demo-UniGest-2026", "Otra-clave-segura-1"));
+        assertEquals(HttpStatus.FORBIDDEN, ex.getStatusCode());
+        verify(u, never()).cambiarClave(anyString(), anyBoolean());
+    }
 }
