@@ -40,7 +40,7 @@
     <div class="sidebar-bottom">
       <div class="sidebar-help">
         <span class="status-dot"></span>
-        <div><strong>Entorno local</strong><small>Solo para desarrollo y pruebas</small></div>
+        <div><strong id="env-title">Entorno local</strong><small id="env-detail">Solo para desarrollo y pruebas</small></div>
       </div>
       <button class="sidebar-exit" id="logout-btn" type="button" disabled>Cerrar sesión <span>↗</span></button>
       <div class="sidebar-footer">UNIGEST · VERSIÓN 0.11.0</div>
@@ -55,7 +55,7 @@
         <span class="crumb">Plataforma académica <span class="crumb-slash">/</span> <strong id="breadcrumb">Inicio</strong></span>
       </div>
       <div class="topbar-actions">
-        <span class="topbar-environment"><span class="status-dot"></span> Localhost</span>
+        <span class="topbar-environment"><span class="status-dot"></span> <span id="env-badge">Localhost</span></span>
         <div class="account-chip"><span class="account-avatar">AD</span><span id="account-name">Sin sesión</span></div>
       </div>
     </header>
@@ -128,7 +128,7 @@
             <div class="notice-line"><span class="notice-check">✓</span> Gestión de estudiantes y docentes</div>
             <div class="notice-line"><span class="notice-check">✓</span> Grupos y matrículas académicas</div>
             <div class="notice-line"><span class="notice-check">✓</span> Acceso administrativo con CSRF</div>
-            <p class="notice-warning">Entorno de desarrollo: utiliza únicamente información ficticia.</p>
+            <p class="notice-warning" id="env-notice">Entorno de desarrollo: utiliza únicamente información ficticia.</p>
           </section>
         </div>
       </section>
@@ -472,7 +472,12 @@
       <p class="form-error" id="login-error" role="alert" hidden></p>
       <button class="button button-primary button-wide" id="login-submit" type="submit">Entrar al panel →</button>
     </form>
-    <div class="login-note"><span class="status-dot"></span> Entorno local de desarrollo · Utiliza datos ficticios</div>
+    <div class="demo-access" id="demo-access" hidden>
+      <strong>Demo pública: entra con un clic</strong>
+      <span>Datos ficticios que se reinician automáticamente. Contraseña de las tres cuentas: <code id="demo-password"></code></span>
+      <div class="demo-buttons" id="demo-buttons"></div>
+    </div>
+    <div class="login-note" id="login-note"><span class="status-dot"></span> Entorno local de desarrollo · Utiliza datos ficticios</div>
   </div>
 </div>
 

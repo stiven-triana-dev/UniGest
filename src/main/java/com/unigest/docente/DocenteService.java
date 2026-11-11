@@ -25,6 +25,14 @@ public class DocenteService {
     private final RolRepository roles;
     private final PasswordEncoder passwordEncoder;
 
+// Demo pública: protege las cuentas de prueba. Opcional para las pruebas unitarias.
+    private com.unigest.demo.DemoModo demo;
+
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    void setDemo(com.unigest.demo.DemoModo demo) { this.demo = demo; }
+
+    private void protegerDemo(String correo) { if (demo != null) demo.protegerCuenta(correo); }
+
     public DocenteService(DocenteRepository docentes,
             UsuarioRepository usuarios, RolRepository roles,
             PasswordEncoder passwordEncoder) {
@@ -88,6 +96,7 @@ public class DocenteService {
         String documento = limpiar(solicitud.documento());
 
         validarUnicos(correo, codigo, documento, docente);
+        if (!correo.equalsIgnoreCase(docente.getUsuario().getCorreo())) protegerDemo(docente.getUsuario().getCorreo());
 
         docente.getUsuario().actualizarDatos(
                 limpiar(solicitud.nombres()),
@@ -102,7 +111,9 @@ public class DocenteService {
 
     @Transactional
     public void desactivar(Long id) {
-        buscarActivo(id).getUsuario().desactivar();
+        var usuario = buscarActivo(id).getUsuario();
+        protegerDemo(usuario.getCorreo());
+        usuario.desactivar();
     }
 
     private Docente buscarActivo(Long id) {

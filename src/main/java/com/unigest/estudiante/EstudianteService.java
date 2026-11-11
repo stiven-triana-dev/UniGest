@@ -23,6 +23,14 @@ public class EstudianteService {
     private final ProgramaRepository programas;
     private final PasswordEncoder passwordEncoder;
 
+// Demo pública: protege las cuentas de prueba. Opcional para las pruebas unitarias.
+    private com.unigest.demo.DemoModo demo;
+
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    void setDemo(com.unigest.demo.DemoModo demo) { this.demo = demo; }
+
+    private void protegerDemo(String correo) { if (demo != null) demo.protegerCuenta(correo); }
+
     public EstudianteService(EstudianteRepository estudiantes, UsuarioRepository usuarios,
             RolRepository roles, ProgramaRepository programas, PasswordEncoder passwordEncoder) {
         this.estudiantes = estudiantes;
@@ -72,6 +80,7 @@ public class EstudianteService {
         String codigo = normalizarCodigo(solicitud.codigo());
         String documento = normalizarDocumento(solicitud.documento());
         validarUnicos(correo, codigo, documento, id);
+        if (!correo.equalsIgnoreCase(estudiante.getUsuario().getCorreo())) protegerDemo(estudiante.getUsuario().getCorreo());
         Programa programa = buscarPrograma(solicitud.programaId());
         estudiante.getUsuario().actualizarDatos(limpiar(solicitud.nombres()), limpiar(solicitud.apellidos()), correo);
         estudiante.actualizarDatos(codigo, documento, programa);
@@ -81,7 +90,9 @@ public class EstudianteService {
 
     @Transactional
     public void desactivar(Long id) {
-        buscarActivo(id).getUsuario().desactivar();
+        var usuario = buscarActivo(id).getUsuario();
+        protegerDemo(usuario.getCorreo());
+        usuario.desactivar();
     }
 
     private Estudiante buscarActivo(Long id) {
