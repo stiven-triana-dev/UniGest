@@ -43,7 +43,7 @@
   const score=x=>x==null?'Pendiente':Number(x).toFixed(2);
   function cell(tr,text){tr.append(node('td',text));}
   function button(label,fn){const b=node('button',label);b.type='button';b.addEventListener('click',fn);return b;}
-  const roles={ROLE_DOCENTE:'docente',ROLE_ESTUDIANTE:'estudiante'};
+  const APROBATORIA=3;
 
   function logoutUI() {
     state.user=null; state.role=null;
@@ -116,7 +116,9 @@
   function renderGroups() {
     clear('teacher-group');option($('teacher-group'),'','Selecciona un grupo');
     state.groups.forEach(g=>option($('teacher-group'),g.id,`${g.codigo} — ${g.asignatura} (${g.periodo})`));
-    $('teacher-group').value=state.group && state.groups.some(g=>String(g.id)===state.group)?state.group:'';
+    // Sin grupo elegido, abre el primero para que el docente vea su consolidado de una vez.
+    $('teacher-group').value=state.group && state.groups.some(g=>String(g.id)===state.group)?state.group
+      :state.groups.length?String(state.groups[0].id):'';
     $('new-eval').disabled=!$('teacher-group').value;
   }
   async function loadGroups() {
@@ -146,6 +148,8 @@
       state.evaluations=evals;
       $('teacher-summary').textContent=`${report.grupoCodigo} · ${report.asignaturaNombre} · ${report.periodoNombre}`;
       renderEvaluations();renderTeacherReport(report);
+      // Abre la primera evaluación para que el libro de notas no arranque vacío.
+      if(state.evaluations.length){$('teacher-eval').value=String(state.evaluations[0].id);await loadGrades();}
     }catch(e){if(seq===state.seq)notice(e.message);}
   }
   function renderEvaluations() {
@@ -201,7 +205,7 @@
     clear('grade-rows');
     for(const row of state.grades){
       const tr=node('tr');const td=node('td');td.append(node('strong',row.estudianteNombre),node('small',row.estudianteCodigo));tr.append(td);
-      cell(tr,score(row.nota));
+      const nt=node('td');nt.append(gradeBar(row.nota));tr.append(nt);
       const action=node('td');
       if(row.estado==='ACTIVA')action.append(button(row.nota==null?'Calificar':'Corregir',()=>openGrade(row)));
       else action.textContent='—';
@@ -230,42 +234,127 @@
   }
   function renderTeacherReport(report){
     clear('teacher-report');
-    const sum=node('div',null,'sum');
-    sum.append(node('span',`Estudiantes: ${report.resumen.total}`),node('span',`Completas: ${report.resumen.completas}`),node('span',`Promedio: ${score(report.resumen.promedio)}`));
-    $('teacher-report').append(sum);
+    const r=report.resumen;
+    const tiles=node('div',null,'tiles');
+    tiles.append(tile('Promedio del grupo',r.promedio==null?'—':score(r.promedio),'destacada'),
+      tile('Estudiantes',r.total),tile('Con definitiva',`${r.completas} de ${r.total}`));
+    $('teacher-report').append(tiles);
     const wrap=node('div',null,'table-wrap');const table=node('table');
     const head=node('thead');head.innerHTML='<tr><th>Estudiante</th><th>Definitiva</th><th>Estado</th></tr>';table.append(head);
     const body=node('tbody');
-    for(const e of report.estudiantes){const tr=node('tr');cell(tr,e.estudianteNombre);cell(tr,score(e.definitiva));cell(tr,e.aprobado==null?'Pendiente':e.aprobado?'Aprobado':'No aprobado');body.append(tr);}
+    for(const e of report.estudiantes){
+      const tr=node('tr');cell(tr,e.estudianteNombre);
+      const g=node('td');g.append(gradeBar(e.definitiva));tr.append(g);
+      const s=node('td');s.append(estadoPill(e.aprobado,'o'));tr.append(s);
+      body.append(tr);
+    }
     table.append(body);wrap.append(table);$('teacher-report').append(wrap);
   }
 
   async function loadPeriods(){
     try{
-      const list=await request('/mi-espacio/estudiante/periodos');
-      clear('student-period');option($('student-period'),'','Selecciona un período');
-      list.forEach(p=>option($('student-period'),p.id,`${p.codigo} — ${p.nombre}`));
-      clear('student-report');clear('student-summary');$('student-print').hidden=true;
-      if(!list.length)notice('Todavía no tienes matrículas activas o finalizadas.');
+      const list=(await request('/mi-espacio/estudiante/periodos')||[]).sort((x,y)=>String(x.codigo).localeCompare(String(y.codigo)));
+      clear('student-periods');clear('student-report');clear('student-summary');$('student-print').hidden=true;
+      list.forEach(p=>{
+        const b=button(p.codigo,()=>selectPeriod(p.id));
+        b.dataset.period=String(p.id);b.title=p.nombre;b.setAttribute('aria-pressed','false');
+        $('student-periods').append(b);
+      });
+      if(!list.length){notice('Todavía no tienes matrículas activas o finalizadas.');return;}
+      // El período más reciente abre por defecto: el estudiante ve sus notas sin buscar nada.
+      await selectPeriod(list[list.length-1].id);
     }catch(e){notice(e.message);}
   }
+  async function selectPeriod(id){
+    state.period=String(id);
+    $('student-periods').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.period===state.period)));
+    await loadStudentReport();
+  }
+  // Nota de 0 a 5 con una barra; la marca vertical es el mínimo aprobatorio (3,0).
+  function gradeBar(value){
+    const wrap=node('span',null,'nota');
+    if(value==null){wrap.classList.add('vacia');wrap.append(node('b','—'));return wrap;}
+    const v=Number(value);
+    wrap.classList.add(v>=APROBATORIA?'ok':'baja');
+    const bar=node('i');bar.style.setProperty('--v',`${Math.max(0,Math.min(100,v/5*100))}%`);
+    wrap.append(node('b',score(v)),bar);
+    return wrap;
+  }
+  function estadoPill(aprobado,fin='a'){
+    if(aprobado==null)return node('span','En curso','pill pending');
+    return node('span',aprobado?`Aprobad${fin}`:`No aprobad${fin}`,aprobado?'pill':'pill baja');
+  }
+  function tile(label,value,extra){
+    const t=node('div',null,'tile'+(extra?` ${extra}`:''));
+    t.append(node('strong',value),node('span',label));return t;
+  }
+  function materiaCard(m){
+    const card=node('article',null,'materia');
+    const head=node('div',null,'materia-head');
+    const title=node('div');
+    title.append(node('h3',m.nombre),node('p',`${m.codigo} · Grupo ${m.grupoCodigo} · ${m.creditos} créditos`,'muted'));
+    const result=node('div',null,'materia-final');
+    if(m.definitiva!=null)result.append(node('strong',score(m.definitiva)));
+    result.append(estadoPill(m.aprobado));
+    head.append(title,result);card.append(head);
+
+    const evaluado=m.notas.reduce((a,n)=>a+Number(n.ponderacion||0),0);
+    const acumulado=m.notas.reduce((a,n)=>a+Number(n.nota||0)*Number(n.ponderacion||0)/100,0);
+    // Barra de avance: cada tramo es una evaluación publicada, del ancho de su porcentaje.
+    const avance=node('div',null,'avance');avance.setAttribute('role','img');
+    avance.setAttribute('aria-label',`Evaluado ${Math.round(evaluado)} % del curso`);
+    for(const n of m.notas){
+      const seg=node('i',null,Number(n.nota)>=APROBATORIA?'ok':'baja');
+      seg.style.width=`${Number(n.ponderacion)}%`;seg.title=`${n.titulo}: ${score(n.nota)} (${n.ponderacion} %)`;
+      avance.append(seg);
+    }
+    card.append(avance);
+    if(m.definitiva==null && m.notas.length){
+      const restante=100-evaluado;
+      let consejo='';
+      if(restante>0.0001){
+        const necesita=(APROBATORIA-acumulado)/(restante/100);
+        consejo=necesita<=0?' Ya tienes asegurado el 3.0.'
+          :necesita>5?' Con lo que falta ya no alcanza el 3.0.'
+          :` Para aprobar necesitas ${score(necesita)} en el ${Math.round(restante)} % que falta.`;
+      }
+      card.append(node('p',`Evaluado ${Math.round(evaluado)} % · llevas ${score(acumulado)} de 5.00.${consejo}`,'avance-texto'));
+    }
+    if(!m.notas.length){card.append(node('p','Todavía no hay notas publicadas en esta materia.','avance-texto'));return card;}
+    const list=node('ul',null,'evaluaciones');
+    for(const n of m.notas){
+      const li=node('li');
+      const name=node('span',null,'evaluacion');name.append(node('span',n.titulo),node('small',`${n.ponderacion} %`));
+      li.append(name,gradeBar(n.nota));list.append(li);
+    }
+    card.append(list);
+    return card;
+  }
+  // Porcentaje evaluado promedio de las materias, ponderado por créditos.
+  function avancePeriodo(materias){
+    const cr=materias.reduce((a,m)=>a+Number(m.creditos||0),0)||1;
+    return materias.reduce((a,m)=>a+Number(m.creditos||0)*m.notas.reduce((s,n)=>s+Number(n.ponderacion||0),0),0)/cr;
+  }
   async function loadStudentReport(){
-    const id=$('student-period').value;
+    const id=state.period;
     clear('student-report');clear('student-summary');$('student-print').hidden=true;
     if(!id)return;
     try{
       const b=await request(`/mi-espacio/estudiante/boletin?periodoId=${Number(id)}`);
-      $('student-summary').append(node('p',`${b.estudianteNombre} · ${b.estudianteCodigo} · ${b.programa}`));
-      const sum=node('div',null,'sum');sum.append(node('span',`Materias: ${b.resumen.total}`),
-        node('span',`Completas: ${b.resumen.completas}`),node('span',`Promedio: ${score(b.resumen.promedio)}`));
-      $('student-summary').append(sum);
-      for(const m of b.materias){
-        const section=node('div',null,'card-block');section.append(node('h3',`${m.nombre} · ${m.grupoCodigo}`));
-        const tag=node('span',m.definitiva==null?'Definitiva pendiente':`Definitiva: ${score(m.definitiva)}`,m.definitiva==null?'pill pending':'pill');section.append(tag);
-        for(const n of m.notas){section.append(node('div',`${n.titulo} (${n.ponderacion}%) — ${score(n.nota)}`,'note-line'));}
-        if(!m.notas.length)section.append(node('p','No hay notas publicadas para esta materia.'));
-        $('student-report').append(section);
-      }
+      if(id!==state.period)return;
+      $('student-summary').append(node('p',`${b.estudianteNombre} · ${b.estudianteCodigo} · ${b.programa} · ${b.periodoNombre}`,'muted'));
+      const r=b.resumen;
+      const creditos=b.materias.reduce((a,m)=>a+Number(m.creditos||0),0);
+      const tiles=node('div',null,'tiles');
+      tiles.append(
+        r.promedio==null
+          ?tile('Evaluado del período',`${Math.round(avancePeriodo(b.materias))} %`,'destacada')
+          :tile('Promedio del período',score(r.promedio),'destacada'),
+        tile('Materias inscritas',r.total),
+        tile('Créditos',creditos),
+        tile(r.pendientes?'En curso':'Aprobadas',r.pendientes?r.pendientes:`${r.aprobadas} de ${r.total}`));
+      $('student-summary').append(tiles);
+      for(const m of b.materias)$('student-report').append(materiaCard(m));
       $('student-print').hidden=!b.materias.length;
     }catch(e){notice(e.message);}
   }
@@ -279,7 +368,6 @@
     $('teacher-eval').addEventListener('change',loadGrades);
     $('eval-form').addEventListener('submit',saveEval);
     $('grade-form').addEventListener('submit',saveGrade);
-    $('student-period').addEventListener('change',loadStudentReport);
     $('student-print').addEventListener('click',()=>window.print());
     document.querySelectorAll('[data-close-dialog]').forEach(b=>b.addEventListener('click',()=>b.closest('dialog').close()));
   }
