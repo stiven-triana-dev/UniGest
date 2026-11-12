@@ -55,7 +55,12 @@ public class SecurityConfig {
                         "/api/v1/auth/csrf",
                         "/api/v1/demo",
                         "/panel/**",
-                        "/portal/**"
+                        "/portal/**",
+                        // Documentación de la API (Swagger). Probar rutas privadas exige sesión.
+                        "/swagger-ui.html",
+                        "/swagger-ui/**",
+                        "/v3/api-docs",
+                        "/v3/api-docs/**"
                 ).permitAll()
 
                 // Inicio de sesión.
