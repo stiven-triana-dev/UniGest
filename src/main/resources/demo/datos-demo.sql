@@ -100,12 +100,12 @@ JOIN periodos pe ON pe.codigo = v.periodo;
 INSERT INTO matriculas (estudiante_id, grupo_id, fecha, estado)
 SELECT u.id, g.id, pe.fecha_inicio::timestamptz, v.estado
 FROM (VALUES
- ('PROG101', '2026-1', 'estudiante@demo.test', 'FINALIZADA'), ('PROG101', '2026-1', 'v.rios@demo.test', 'FINALIZADA'),
- ('PROG101', '2026-1', 'j.cardenas@demo.test', 'FINALIZADA'), ('PROG101', '2026-1', 'd.ortiz@demo.test', 'FINALIZADA'),
- ('PROG101', '2026-1', 's.vargas@demo.test', 'FINALIZADA'), ('PROG101', '2026-1', 'm.lopez@demo.test', 'FINALIZADA'),
- ('MATE101', '2026-1', 'estudiante@demo.test', 'FINALIZADA'), ('MATE101', '2026-1', 'v.rios@demo.test', 'FINALIZADA'),
- ('MATE101', '2026-1', 'j.cardenas@demo.test', 'FINALIZADA'), ('MATE101', '2026-1', 'd.ortiz@demo.test', 'FINALIZADA'),
- ('MATE101', '2026-1', 'c.perez@demo.test', 'FINALIZADA'), ('MATE101', '2026-1', 's.jimenez@demo.test', 'FINALIZADA'),
+ ('PROG101', '2026-1', 'estudiante@demo.test', 'ACTIVA'), ('PROG101', '2026-1', 'v.rios@demo.test', 'ACTIVA'),
+ ('PROG101', '2026-1', 'j.cardenas@demo.test', 'ACTIVA'), ('PROG101', '2026-1', 'd.ortiz@demo.test', 'ACTIVA'),
+ ('PROG101', '2026-1', 's.vargas@demo.test', 'ACTIVA'), ('PROG101', '2026-1', 'm.lopez@demo.test', 'ACTIVA'),
+ ('MATE101', '2026-1', 'estudiante@demo.test', 'ACTIVA'), ('MATE101', '2026-1', 'v.rios@demo.test', 'ACTIVA'),
+ ('MATE101', '2026-1', 'j.cardenas@demo.test', 'ACTIVA'), ('MATE101', '2026-1', 'd.ortiz@demo.test', 'ACTIVA'),
+ ('MATE101', '2026-1', 'c.perez@demo.test', 'ACTIVA'), ('MATE101', '2026-1', 's.jimenez@demo.test', 'ACTIVA'),
  ('ESTR201', '2026-2', 'estudiante@demo.test', 'ACTIVA'), ('ESTR201', '2026-2', 'v.rios@demo.test', 'ACTIVA'),
  ('ESTR201', '2026-2', 'j.cardenas@demo.test', 'ACTIVA'), ('ESTR201', '2026-2', 'd.ortiz@demo.test', 'ACTIVA'),
  ('ESTR201', '2026-2', 's.vargas@demo.test', 'ACTIVA'), ('ESTR201', '2026-2', 'm.lopez@demo.test', 'RETIRADA'),
@@ -160,7 +160,7 @@ SELECT m.id, e.id, m.grupo_id,
 FROM matriculas m
 JOIN evaluaciones e ON e.grupo_id = m.grupo_id
 JOIN usuarios u ON u.id = m.estudiante_id
-WHERE m.estado IN ('ACTIVA', 'FINALIZADA')
+WHERE m.estado IN ('ACTIVA', 'ACTIVA')
   AND (e.publicada OR (e.titulo = 'Proyecto de árboles' AND u.correo IN ('estudiante@demo.test', 'v.rios@demo.test', 'j.cardenas@demo.test')));
 
 -- Una corrección de nota con su motivo, para que se vea el historial.
