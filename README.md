@@ -3,12 +3,25 @@
 ![Java 21](https://img.shields.io/badge/Java-21-orange)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.1.1-6DB33F)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-336791)
-![Tests](https://img.shields.io/badge/tests-92%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-97%20passing-brightgreen)
+[![Demo](https://img.shields.io/badge/demo-en%20l%C3%ADnea-1E3A34)](https://unigest-d9zx.onrender.com)
 [![CI](https://github.com/stiven-triana-dev/UniGest/actions/workflows/tests.yml/badge.svg)](https://github.com/stiven-triana-dev/UniGest/actions)
 
 **UniGest** es una aplicación web para administrar procesos académicos universitarios con tres espacios de trabajo: **administración, docencia y estudiantes**. Gestiona matrículas, grupos, evaluaciones, calificaciones y boletines, con acceso controlado según el rol del usuario.
 
-**Versión:** `v0.11.0` · **Pruebas:** 92 automatizadas, 0 fallos · **CI:** GitHub Actions con Java 21 y PostgreSQL 18
+**Versión:** `v0.11.0` · **Pruebas:** 97 automatizadas, 0 fallos · **CI:** GitHub Actions con Java 21 y PostgreSQL 18
+
+## 🌐 Demo en línea
+
+**[unigest-d9zx.onrender.com](https://unigest-d9zx.onrender.com)**: en la pantalla de inicio de sesión elige una cuenta y entras con un clic.
+
+| Rol | Correo | Qué puedes probar |
+| --- | --- | --- |
+| Administración | `admin@demo.test` | Estudiantes, docentes, grupos, matrículas, evaluaciones, notas y reportes |
+| Docente | `docente@demo.test` | Sus grupos, el plan de evaluación y el libro de notas |
+| Estudiante | `estudiante@demo.test` | Su boletín por periodo, con notas publicadas y definitivas |
+
+Contraseña de las tres cuentas: `Demo-UniGest-2026`. Los datos son ficticios y se reinician cada vez que el servicio arranca, y las cuentas de prueba no se pueden modificar. La primera visita puede tardar cerca de un minuto mientras el servidor gratuito despierta.
 
 ## 🖼️ Capturas
 
@@ -127,6 +140,11 @@ Luego abre:
 - **Panel administrativo:** http://localhost:8080/panel/index.html
 - **Portal docente y estudiante:** http://localhost:8080/portal/index.html
 
+### Modo demo y Docker
+
+- `UNIGEST_DEMO=true` carga datos ficticios al arrancar (`src/main/resources/demo/datos-demo.sql`) y crea las tres cuentas de prueba de la demo. **Vacía las tablas académicas**: úsalo solo en una base dedicada a la demo.
+- El `Dockerfile` compila con Maven y ejecuta con Java 21 limitando la memoria para el plan gratuito de Render (512 MB). Variables: `DB_URL` (formato `jdbc:postgresql://HOST/BASE?sslmode=require`), `DB_USER`, `DB_PASSWORD` y, para la demo, `UNIGEST_DEMO=true`.
+
 > En Windows también puedes usar los scripts de `scripts/` (`Iniciar-UniGest.ps1` y `Probar-UniGest.ps1`), que piden la contraseña de forma segura.
 
 ## 🧪 Pruebas
@@ -138,7 +156,7 @@ mvn clean test
 Resultado verificado:
 
 ```text
-Tests run: 92, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 97, Failures: 0, Errors: 0, Skipped: 0
 BUILD SUCCESS
 ```
 
@@ -161,7 +179,7 @@ Las pruebas cubren lógica de negocio (cálculo de notas, matrículas, cupos), s
 - [ ] Documentación de la API con OpenAPI/Swagger
 - [ ] `docker-compose` para levantar la aplicación y PostgreSQL con un solo comando
 - [ ] Paginación y filtros en los listados
-- [ ] Despliegue en línea con HTTPS
+- [x] Despliegue en línea con HTTPS (Render + Neon, con Docker)
 
 ## 👤 Autor
 
