@@ -41,9 +41,7 @@
   color: var(--tinta);
   background: var(--tiza);
 }
-/* Números de ancho fijo solo donde se comparan cifras (en esta fuente también
-   ensancharían los puntos y los dos puntos del texto corrido). */
-.stat-card > strong, .module-stat > strong, .intro-number strong { font-variant-numeric: tabular-nums; }
+/* Cifras proporcionales: en esta fuente las de ancho fijo separan el punto decimal ("3 . 71"). */
 
 :focus-visible { outline: 3px solid var(--resaltador); outline-offset: 2px; }
 ::selection { background: var(--resaltador); color: var(--tinta); }
@@ -309,3 +307,16 @@
 .data-table th { display: table-cell; font-size: 12px; }
 /* Estos encabezados solo repetían el título de la página. */
 .grade-hero, .report-hero { display: none !important; }
+
+/* v0.13 · Notas con barra de 0 a 5; la línea marca el 3.0 */
+.nota { display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; }
+.nota b { min-width: 34px; text-align: right; font-weight: 700; color: var(--tinta); }
+.nota i { position: relative; width: 84px; height: 6px; border-radius: 99px; background: var(--linea-suave); }
+.nota i::before { content: ""; position: absolute; inset: 0 auto 0 0; width: var(--v); border-radius: inherit; background: var(--aprobado); }
+.nota i::after { content: ""; position: absolute; left: 60%; top: -3px; bottom: -3px; width: 2px; background: var(--tinta); opacity: .35; }
+.nota.baja b { color: var(--alerta); }
+.nota.baja i::before { background: var(--alerta); }
+.nota.vacia b { color: var(--grafito); font-weight: 500; }
+@media print { .nota i { display: none; } }
+/* La cabecera del libro de notas dejaba 180 px vacíos bajo el título */
+.grade-layout .panel-head { min-height: 0; }

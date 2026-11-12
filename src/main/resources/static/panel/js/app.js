@@ -1199,6 +1199,10 @@
       if (s.groups.some(g => String(g.id) === previous)) {
         s.gradeGroup = previous;
         $('grade-group').value = previous;
+      } else if (s.groups.length) {
+        // Sin selección previa se abre el primer grupo: la pantalla nunca arranca vacía.
+        s.gradeGroup = String(s.groups[0].id);
+        $('grade-group').value = s.gradeGroup;
       } else {
         s.gradeGroup = '';
         sessionStorage.removeItem('unigest-grade-group');
@@ -1240,6 +1244,10 @@
 
       renderEvaluations();
       renderFinals();
+      if (s.evaluations.length && !$('grade-eval').value) {
+        $('grade-eval').value = String(s.evaluations[0].id);
+        await loadGrades();
+      }
     } catch(e) {
       if (seq !== s.evalSeq) return;
       renderEvaluations();
@@ -1326,8 +1334,7 @@
         </div></td>
         <td><span class="enrollment-status ${esc(m.estado.toLowerCase())}">
           ${esc(m.estado)}</span></td>
-        <td><strong>${m.nota == null
-          ? 'Pendiente' : Number(m.nota).toFixed(2)}</strong></td>
+        <td>${gradeBar(m.nota)}</td>
         <td>${m.estado === 'ACTIVA'
           ? `<button class="text-action"
               data-grade-save="${Number(m.matriculaId)}">
@@ -1344,10 +1351,7 @@
         <div class="final-row">
           <div><strong>${esc(x.estudianteNombre)}</strong>
             <small>${esc(x.estudianteCodigo)}</small></div>
-          <span class="final-grade ${x.aprobado === false ? 'low' : ''}">
-            ${x.definitiva == null
-              ? 'Pendiente' : Number(x.definitiva).toFixed(2)}
-          </span>
+          ${gradeBar(x.definitiva)}
         </div>`).join('')
       : '<p class="empty-catalog">No hay matrículas activas en este grupo.</p>';
   }
@@ -1510,8 +1514,15 @@
   const reportEstado = n => n == null ? 'Pendiente' : Number(n) >= 3 ? 'Aprobada' : 'Reprobada';
 
   function reportGradeBadge(n) {
-    if (n == null) return '<span class="report-pending">Pendiente</span>';
-    return `<span class="${Number(n) >= 3 ? 'report-pass' : 'report-fail'}">${reportNota(n)}</span>`;
+    return gradeBar(n);
+  }
+
+  // Nota de 0 a 5 con barra; la marca vertical es el mínimo aprobatorio (3.0).
+  function gradeBar(n) {
+    if (n == null) return '<span class="nota vacia"><b>Pendiente</b></span>';
+    const v = Number(n);
+    const pct = Math.max(0, Math.min(100, v / 5 * 100));
+    return `<span class="nota ${v >= 3 ? 'ok' : 'baja'}"><b>${v.toFixed(2)}</b><i style="--v:${pct}%"></i></span>`;
   }
 
   async function loadReportOptions() {
@@ -1529,10 +1540,11 @@
         id:p.id, label:`${p.codigo} — ${p.nombre}`
       })), 'Selecciona un período');
 
+      // Por defecto: el primer grupo y el período en curso, para mostrar datos de una vez.
       s.reportGroup = gruposList.some(g => String(g.id) === s.reportGroup)
-        ? s.reportGroup : '';
+        ? s.reportGroup : gruposList.length ? String(gruposList[0].id) : '';
       s.reportPeriod = periodosList.some(p => String(p.id) === s.reportPeriod)
-        ? s.reportPeriod : '';
+        ? s.reportPeriod : String((periodosList.find(p => p.estado === 'EN_CURSO') || periodosList[0])?.id ?? '');
       $('report-group').value = s.reportGroup;
       $('report-period').value = s.reportPeriod;
 
@@ -1611,7 +1623,7 @@
         id:e.id, label:`${e.codigo} — ${e.nombre}`
       })), rows.length ? 'Selecciona un estudiante' : 'No hay estudiantes matriculados');
       s.reportStudent = rows.some(e => String(e.id) === s.reportStudent)
-        ? s.reportStudent : '';
+        ? s.reportStudent : rows.length ? String(rows[0].id) : '';
       $('report-student').value = s.reportStudent;
       $('report-student').disabled = !rows.length;
       if (s.reportStudent) await loadStudentReport();

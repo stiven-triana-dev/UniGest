@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="referrer" content="no-referrer">
   <title>Mi espacio · UniGest</title>
+  <link rel="icon" href="/panel/img/logo-unigest.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap">
@@ -58,12 +59,10 @@
     </section>
     <section id="student" hidden>
       <div class="card">
-        <span class="eyebrow">MIS ESTUDIOS</span><h2>Mi boletín académico</h2>
-        <p>Consulta tus materias, notas publicadas y definitivas. Ningún estudiante puede consultar el expediente de otro.</p>
-        <label class="select-label">Período académico<select id="student-period"><option value="">Selecciona un período</option></select></label>
+        <div class="section-head"><div><h2>Mi boletín académico</h2><p>Tus materias, notas publicadas y definitivas. Solo tú puedes ver este boletín.</p></div><button id="student-print" type="button" hidden>Imprimir / guardar PDF</button></div>
+        <div class="periodos" id="student-periods" role="group" aria-label="Período académico"></div>
         <div id="student-summary"></div>
-        <div id="student-report"></div>
-        <button id="student-print" type="button" hidden>Imprimir / guardar PDF</button>
+        <div id="student-report" class="materias"></div>
       </div>
     </section>
   </main>

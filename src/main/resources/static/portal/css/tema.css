@@ -101,3 +101,70 @@ dialog h2 { margin: 0; font-size: 21px; font-weight: 700; }
 @media print {
   .sum span:last-child { background: none; border-color: #999; }
 }
+
+/* v0.13 · Boletín visual: períodos como pestañas, cifras en tarjetas y notas con barra */
+.periodos { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 6px; }
+.periodos button { padding: 8px 16px; border-radius: 99px; background: var(--papel); font-weight: 600; font-size: 14px; }
+.periodos button[aria-pressed="true"] { background: var(--pizarra); border-color: var(--pizarra); color: #fff; }
+
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 14px 0 22px; }
+.tile { border: 1px solid var(--linea); border-radius: 12px; padding: 16px 18px; background: var(--papel); }
+.tile strong { display: block; font-size: 30px; font-weight: 700; letter-spacing: -.03em; line-height: 1.1; }
+.tile span { display: block; margin-top: 4px; color: var(--grafito); font-size: 13px; }
+.tile.destacada { background: var(--pizarra); border-color: var(--pizarra); }
+.tile.destacada strong { color: var(--resaltador); }
+.tile.destacada span { color: var(--pizarra-texto); }
+
+.materias { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+.materia { border: 1px solid var(--linea); border-radius: var(--radio); padding: 20px 22px; background: var(--papel); }
+.materia-head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
+.materia-head h3 { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: -.015em; }
+.materia-head p { margin: 4px 0 0; font-size: 13px; }
+.materia-final { text-align: right; flex: none; }
+.materia-final strong { display: block; font-size: 32px; font-weight: 700; letter-spacing: -.03em; line-height: 1; margin-bottom: 6px; }
+.pill { margin: 0; }
+.pill.baja { background: var(--alerta-fondo); color: var(--alerta); }
+
+/* Avance del curso: tramos del ancho de cada evaluación; lo gris falta por evaluar */
+.avance { display: flex; gap: 2px; height: 10px; margin: 18px 0 8px; border-radius: 99px; overflow: hidden; background: var(--linea-suave); }
+.avance i { display: block; height: 100%; background: var(--aprobado); }
+.avance i.baja { background: var(--alerta); }
+.avance-texto { margin: 0 0 4px; font-size: 13px; color: var(--grafito); }
+
+.evaluaciones { list-style: none; margin: 12px 0 0; padding: 0; }
+.evaluaciones li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 9px 0; border-top: 1px solid var(--linea-suave); font-size: 14px; }
+.evaluacion small { margin-left: 8px; color: var(--grafito); font-size: 12px; }
+
+/* Nota con barra de 0 a 5; la línea marca el 3,0 */
+.nota { display: inline-flex; align-items: center; gap: 10px; }
+.nota b { min-width: 34px; text-align: right; font-weight: 700; }
+.nota i { position: relative; width: 84px; height: 6px; border-radius: 99px; background: var(--linea-suave); }
+.nota i::before { content: ""; position: absolute; inset: 0 auto 0 0; width: var(--v); border-radius: inherit; background: var(--aprobado); }
+.nota i::after { content: ""; position: absolute; left: 60%; top: -3px; bottom: -3px; width: 2px; background: var(--tinta); opacity: .35; }
+.nota.baja b { color: var(--alerta); }
+.nota.baja i::before { background: var(--alerta); }
+.nota.vacia b { color: var(--grafito); }
+
+@media (max-width: 800px) {
+  .materias { grid-template-columns: 1fr; }
+  .tile strong { font-size: 26px; }
+}
+@media print {
+  .periodos { display: none; }
+  .tile.destacada { background: none; border-color: #999; }
+  .tile.destacada strong, .tile.destacada span { color: inherit; }
+  .materia { break-inside: avoid; }
+}
+
+@media print {
+  #student .section-head { display: block !important; }
+}
+@media (max-width: 520px) {
+  .tiles { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .tile { padding: 14px; }
+  .materia { padding: 16px; }
+  .nota i { width: 56px; }
+}
+.evaluacion small, .nota b { white-space: nowrap; }
+.tile strong { color: var(--tinta); }
+.tile.destacada strong { color: var(--resaltador); }
