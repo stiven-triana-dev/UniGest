@@ -1,0 +1,103 @@
+/* UniGest · Tema "pizarra y resaltador" (v0.12) para el portal de docentes y estudiantes.
+   Misma paleta que panel/css/tema.css. Capa visual sobre app.css: quitar este
+   <link> devuelve el diseño anterior. */
+
+:root {
+  --pizarra: #1e3a34;
+  --pizarra-2: #2a4b44;
+  --pizarra-texto: #c9d6d1;
+  --tiza: #f3f4f1;
+  --papel: #ffffff;
+  --tinta: #18211e;
+  --grafito: #66706c;
+  --linea: #dfe3de;
+  --linea-suave: #ebeee9;
+  --resaltador: #f5cf4e;
+  --aprobado: #2e7d5b;
+  --aprobado-fondo: #e6f2ec;
+  --alerta: #b4442e;
+  --alerta-fondo: #f9e9e5;
+  --radio: 14px;
+  --radio-control: 8px;
+
+  font-family: "Schibsted Grotesk", "Segoe UI", system-ui, sans-serif;
+  color: var(--tinta);
+  background: var(--tiza);
+}
+/* En esta fuente los números de ancho fijo también ensanchan el punto decimal:
+   se dejan las cifras proporcionales. */
+body { background: var(--tiza); font-size: 15px; }
+:focus-visible { outline: 3px solid var(--resaltador); outline-offset: 2px; }
+::selection { background: var(--resaltador); color: var(--tinta); }
+
+/* Los rótulos en mayúsculas repetían el título de cada bloque. */
+.eyebrow { display: none; }
+
+/* Barra superior: la pizarra */
+.topbar { background: var(--pizarra); padding-block: 14px; }
+.brand img { width: 34px; height: 34px; background: var(--papel); border-radius: 8px; padding: 3px; }
+.brand b { font-size: 19px; font-weight: 700; letter-spacing: -.02em; }
+.brand small { font-size: 12px; letter-spacing: 0; color: var(--pizarra-texto); text-transform: lowercase; }
+.brand small::first-letter { text-transform: uppercase; }
+.account { font-size: 14px; color: var(--pizarra-texto); }
+.account button { border-color: #ffffff33; border-radius: var(--radio-control); color: #fff; }
+.account button:hover { background: #ffffff14; }
+
+main { padding: 32px 26px 64px; }
+.hero { padding: 16px 0 28px; }
+.hero h1 { margin: 0 0 8px; font-size: clamp(30px, 3.4vw, 44px); font-weight: 700; letter-spacing: -.03em; line-height: 1.05; }
+.hero p { color: var(--grafito); font-size: 16px; margin: 0; }
+
+/* Tarjetas planas */
+.card { background: var(--papel); border: 1px solid var(--linea); border-radius: var(--radio); box-shadow: none; padding: 28px; }
+.card h2 { margin: 0 0 6px; font-size: 21px; font-weight: 700; letter-spacing: -.015em; }
+.card p, .muted { color: var(--grafito); font-size: 14px; line-height: 1.55; }
+.split { gap: 16px; }
+
+/* Controles */
+button { border-color: var(--linea); border-radius: var(--radio-control); color: var(--tinta); font-weight: 500; transition: background-color .15s; }
+button:hover { background: var(--tiza); }
+.primary { background: var(--pizarra); border-color: var(--pizarra); color: #fff; font-weight: 600; }
+.primary:hover { background: var(--pizarra-2); }
+.select-label { color: var(--grafito); font-size: 14px; }
+.select-label select { border-color: var(--linea); border-radius: var(--radio-control); background: var(--papel); color: var(--tinta); }
+label { font-size: 14px; font-weight: 600; color: var(--tinta); }
+label input, label textarea { border-color: var(--linea); border-radius: var(--radio-control); }
+label input:focus, label textarea:focus, .select-label select:focus { outline: 0; border-color: var(--pizarra); box-shadow: 0 0 0 3px #f5cf4e80; }
+
+/* Tablas */
+th { background: transparent; color: var(--grafito); text-transform: none; letter-spacing: 0; font-size: 13px; font-weight: 600; border-bottom: 1px solid var(--linea); }
+td { border-bottom-color: var(--linea-suave); font-size: 14px; }
+td small { color: var(--grafito); }
+td button { border-radius: 6px; }
+
+/* Boletín: las cifras del resumen llevan el trazo de resaltador */
+.sum { gap: 10px; margin: 18px 0 8px; }
+.sum span {
+  background: var(--papel); border: 1px solid var(--linea); border-radius: var(--radio-control);
+  padding: 10px 14px; font-size: 14px; font-weight: 600;
+}
+.sum span:last-child { background: var(--resaltador); border-color: var(--resaltador); }
+.card-block { padding: 20px 0; border-bottom-color: var(--linea-suave); }
+.card-block h3 { font-size: 17px; font-weight: 700; letter-spacing: -.01em; }
+.note-line { font-size: 14px; color: var(--grafito); padding: 5px 0; }
+.pill { border-radius: 99px; background: var(--aprobado-fondo); color: var(--aprobado); font-weight: 700; font-size: 13px; padding: 5px 11px; display: inline-block; margin-bottom: 6px; }
+.pill.pending { background: var(--tiza); color: var(--grafito); }
+
+/* Avisos y diálogos */
+.notice { background: var(--alerta-fondo); color: var(--alerta); border-color: #efcfc6; border-radius: var(--radio-control); }
+.notice.ok { background: var(--aprobado-fondo); color: var(--aprobado); border-color: #c5e0d3; }
+dialog { border-color: var(--linea); border-radius: var(--radio); box-shadow: 0 30px 60px #0c181540; }
+dialog::backdrop { background: #18211e99; }
+dialog h2 { margin: 0; font-size: 21px; font-weight: 700; }
+
+@media (max-width: 800px) {
+  main { padding: 22px 14px 48px; }
+  .card { padding: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+@media print {
+  .sum span:last-child { background: none; border-color: #999; }
+}

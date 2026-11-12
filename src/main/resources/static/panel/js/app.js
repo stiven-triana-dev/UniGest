@@ -274,7 +274,7 @@
     } finally {
       $('login-password').value = '';
       btn.disabled = false;
-      btn.textContent = 'Entrar al panel →';
+      btn.textContent = 'Entrar';
     }
   }
 

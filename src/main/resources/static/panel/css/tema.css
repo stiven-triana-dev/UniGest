@@ -1,0 +1,311 @@
+/* UniGest · Tema "pizarra y resaltador" (v0.12)
+   Capa visual sobre app.css: cambia color, tipografía y superficies sin tocar
+   la estructura ni el JavaScript. Para volver al diseño anterior basta con
+   quitar el <link> a este archivo.
+
+   Pizarra   #1E3A34  menú lateral, bloques principales, botón primario
+   Tiza      #F3F4F1  fondo de la aplicación
+   Papel     #FFFFFF  tarjetas y tablas
+   Tinta     #18211E  texto
+   Grafito   #66706C  texto secundario
+   Resaltador #F5CF4E solo para lo activo: sección actual, foco y cifras clave */
+
+:root {
+  --pizarra: #1e3a34;
+  --pizarra-2: #2a4b44;
+  --pizarra-texto: #c9d6d1;
+  --tiza: #f3f4f1;
+  --papel: #ffffff;
+  --tinta: #18211e;
+  --grafito: #66706c;
+  --linea: #dfe3de;
+  --linea-suave: #ebeee9;
+  --resaltador: #f5cf4e;
+  --aprobado: #2e7d5b;
+  --aprobado-fondo: #e6f2ec;
+  --alerta: #b4442e;
+  --alerta-fondo: #f9e9e5;
+  --radio: 14px;
+  --radio-control: 8px;
+
+  /* tokens de app.css redirigidos al tema */
+  --navy: var(--pizarra);
+  --blue: var(--pizarra);
+  --ink: var(--tinta);
+  --muted: var(--grafito);
+  --line: var(--linea);
+  --shadow: none;
+
+  font-family: "Schibsted Grotesk", "Segoe UI", system-ui, sans-serif;
+  font-size: 14px;
+  color: var(--tinta);
+  background: var(--tiza);
+}
+/* Números de ancho fijo solo donde se comparan cifras (en esta fuente también
+   ensancharían los puntos y los dos puntos del texto corrido). */
+.stat-card > strong, .module-stat > strong, .intro-number strong { font-variant-numeric: tabular-nums; }
+
+:focus-visible { outline: 3px solid var(--resaltador); outline-offset: 2px; }
+::selection { background: var(--resaltador); color: var(--tinta); }
+
+/* Rótulos en mayúsculas que repetían el título: fuera. */
+.eyebrow, .banner-tag, .stat-accent, .sidebar-label, .module-intro small,
+.catalog-card::after, .catalog-card::before, .art-ring { display: none !important; }
+
+/* ESTRUCTURA */
+.main-shell { background: var(--tiza); }
+.main-content { padding: 40px 48px 80px; }
+
+/* MENÚ LATERAL: la pizarra */
+.sidebar {
+  background: var(--pizarra);
+  padding: 28px 16px 18px;
+  scrollbar-color: var(--pizarra-2) var(--pizarra);
+}
+.brand { padding: 0 12px 34px; }
+.brand-logo { width: 40px; height: 40px; }
+.brand-title { font-size: 22px; font-weight: 700; letter-spacing: -.02em; }
+.brand-subtitle { font-size: 11px; letter-spacing: 0; font-weight: 400; text-transform: lowercase; color: var(--pizarra-texto); }
+.brand-subtitle::first-letter { text-transform: uppercase; }
+.nav { gap: 2px; }
+.nav-link {
+  position: relative;
+  padding: 11px 14px; border: 0; border-radius: var(--radio-control);
+  color: var(--pizarra-texto); font-size: 14px; font-weight: 500;
+  transition: background-color .15s, color .15s;
+}
+.nav-link:hover { background: #ffffff10; color: #fff; }
+.nav-link.active { background: transparent; color: #fff; font-weight: 700; box-shadow: none; }
+/* El trazo de resaltador marca dónde estás. */
+.nav-link.active::before {
+  content: ""; position: absolute; left: 0; top: 9px; bottom: 9px; width: 4px;
+  border-radius: 4px; background: var(--resaltador);
+}
+.nav-icon { font-size: 17px; opacity: .8; }
+.nav-link.active .nav-icon { opacity: 1; }
+.sidebar-help { background: transparent; border: 1px solid #ffffff1f; border-radius: var(--radio-control); }
+.sidebar-help small { color: var(--pizarra-texto); font-size: 11px; }
+.status-dot { background: var(--resaltador); box-shadow: none; }
+.sidebar-exit { color: var(--pizarra-texto); font-size: 13px; }
+.sidebar-footer { border-top-color: #ffffff1f; color: #8fa59d; letter-spacing: .02em; }
+
+/* ENCABEZADO */
+.topbar { height: 72px; padding: 0 48px; background: var(--tiza); border-bottom: 1px solid var(--linea); }
+.crumb { color: var(--grafito); font-size: 13px; }
+.crumb-slash { color: var(--linea); }
+.topbar-environment { color: var(--grafito); font-size: 12px; }
+.account-chip { background: var(--papel); border-color: var(--linea); font-weight: 600; font-size: 13px; }
+.account-avatar { background: var(--pizarra); color: #fff; }
+.menu-toggle { color: var(--tinta); }
+
+/* TÍTULOS */
+.page-heading { margin-bottom: 32px; }
+.page-heading h1 { margin: 0 0 6px; font-size: clamp(28px, 2.4vw, 38px); font-weight: 700; letter-spacing: -.025em; }
+.page-heading p { color: var(--grafito); font-size: 14px; }
+.section-title { margin: 40px 0 16px; }
+.section-title h2 { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -.01em; }
+.panel-head h2, .panel-head h3 { margin: 0; font-size: 19px; font-weight: 700; letter-spacing: -.01em; }
+.panel-head p { color: var(--grafito); font-size: 13px; }
+
+/* BOTONES */
+.button { border-radius: var(--radio-control); font-size: 13px; font-weight: 600; padding: 11px 18px; transition: background-color .15s, border-color .15s; }
+.button-primary { background: var(--pizarra); color: #fff; box-shadow: none; }
+.button-primary:not(:disabled):hover { background: var(--pizarra-2); transform: none; filter: none; }
+.button-outline { color: var(--tinta); background: var(--papel); border-color: var(--linea); }
+.button-outline:hover { background: var(--tiza); border-color: #c9cfc8; }
+.button-light { background: var(--resaltador); color: var(--tinta); }
+.button-light:hover { background: #f8d968; }
+.text-action { border-radius: 6px; background: transparent; color: var(--pizarra); font-size: 12px; font-weight: 600; padding: 7px 9px; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #b9c5c0; }
+.text-action:hover { background: var(--tiza); text-decoration-color: var(--pizarra); }
+.text-action.danger { color: var(--alerta); background: transparent; text-decoration-color: #e2b9b0; }
+.text-action.danger:hover { background: var(--alerta-fondo); }
+.icon-button { background: var(--tiza); color: var(--grafito); }
+
+/* INICIO: el bloque de bienvenida es la pizarra principal */
+.welcome-banner {
+  min-height: 240px; border-radius: var(--radio); box-shadow: none;
+  background:
+    linear-gradient(#ffffff0a 1px, transparent 1px) 0 0 / 28px 28px,
+    linear-gradient(90deg, #ffffff0a 1px, transparent 1px) 0 0 / 28px 28px,
+    var(--pizarra);
+}
+.welcome-copy { padding: 44px 48px; max-width: 720px; }
+.welcome-copy h2 { font-size: clamp(28px, 3vw, 40px); line-height: 1.1; letter-spacing: -.03em; font-weight: 700; margin-bottom: 16px; }
+.welcome-copy h2 em { color: inherit; font-weight: inherit; }
+.welcome-copy p { color: var(--pizarra-texto); font-size: 15px; line-height: 1.6; max-width: 520px; }
+.banner-art { width: 30%; }
+.welcome-logo { width: min(150px, 60%); opacity: .9; }
+
+/* CIFRAS */
+.stats-grid, .module-stats { gap: 16px; }
+.stat-card, .module-stat {
+  padding: 22px 24px; border: 1px solid var(--linea); border-radius: var(--radio);
+  background: var(--papel); box-shadow: none; border-top-width: 1px;
+}
+.stat-card:hover { transform: none; box-shadow: none; }
+.stat-icon, .module-stat-icon, .quick-icon, .catalog-icon {
+  width: 36px; height: 36px; border-radius: var(--radio-control);
+  background: var(--tiza); color: var(--pizarra); font-size: 18px;
+}
+.icon-blue, .icon-purple, .icon-amber { background: var(--tiza); color: var(--pizarra); }
+.stat-card > strong, .module-stat > strong {
+  display: inline-block; margin-top: 18px; font-size: 44px; font-weight: 700; letter-spacing: -.03em; line-height: 1;
+  /* las cifras clave llevan el trazo de resaltador */
+  background: linear-gradient(transparent 62%, var(--resaltador) 62%, var(--resaltador) 92%, transparent 92%);
+  padding: 0 4px; margin-left: -4px;
+}
+.stat-card > span { font-size: 14px; font-weight: 600; margin-top: 10px; }
+.stat-card > small, .module-stat p { color: var(--grafito); font-size: 13px; }
+.module-stat, .module-stat:nth-child(2), .module-stat:nth-child(3),
+.subject-stat, .subject-stat-gold, .subject-stat-green { border-top-color: var(--linea); }
+
+/* PANELES */
+.surface-panel { border-radius: var(--radio); border-color: var(--linea); box-shadow: none; }
+.home-grid { gap: 16px; }
+.quick-card { border: 0; border-bottom: 1px solid var(--linea-suave); border-radius: 0; padding: 14px 4px; }
+.quick-card:last-child { border-bottom: 0; }
+.quick-card:hover { background: var(--tiza); border-color: var(--linea-suave); }
+.quick-card strong { font-size: 14px; font-weight: 600; }
+.quick-card small { font-size: 12px; color: var(--grafito); }
+.quick-arrow { color: var(--grafito); }
+.quick-actions { gap: 0; }
+.notice-panel h3 { font-size: 19px; }
+.notice-panel p { font-size: 13px; color: var(--grafito); }
+.notice-check { background: var(--aprobado-fondo); color: var(--aprobado); }
+.notice-line { font-size: 13px; }
+.notice-panel .notice-warning { color: var(--grafito); border-top-color: var(--linea); }
+
+/* Encabezados de módulo (calificaciones, reportes, docentes): sin degradado */
+.module-intro, .grade-hero, .report-hero {
+  background: var(--pizarra) !important; border-radius: var(--radio); box-shadow: none;
+}
+.module-intro p { color: var(--pizarra-texto); font-size: 14px; }
+.module-intro .intro-icon { background: #ffffff14; color: var(--resaltador); }
+.intro-number { border-left-color: #ffffff26; }
+.intro-number small { color: var(--pizarra-texto); letter-spacing: 0; }
+
+/* BUSCADORES Y TABLAS */
+.table-toolbar { background: var(--papel); border-top: 1px solid var(--linea-suave); padding: 16px 28px; }
+.subject-panel .table-toolbar { background: var(--papel); }
+.search-field { border-color: var(--linea); border-radius: var(--radio-control); color: var(--grafito); min-height: 44px; }
+.search-field:focus-within { border-color: var(--pizarra); box-shadow: 0 0 0 3px #f5cf4e66; }
+.search-field input { font-size: 14px; }
+.filter-field { color: var(--grafito); font-size: 13px; }
+.filter-field select { border-color: var(--linea); border-radius: var(--radio-control); color: var(--tinta); }
+.data-table thead { background: transparent; border-block: 0; border-bottom: 1px solid var(--linea); }
+.data-table th { padding: 14px 24px; color: var(--grafito); font-size: 12px; font-weight: 600; letter-spacing: 0; text-transform: none; }
+.data-table td { padding: 16px 24px; color: var(--tinta); font-size: 13px; border-bottom-color: var(--linea-suave); }
+.data-table tbody tr:hover { background: #f8f9f6; }
+.student-avatar { border-radius: 50%; background: var(--tiza); color: var(--pizarra); font-weight: 700; }
+.name-cell strong { font-size: 14px; font-weight: 600; }
+.name-cell small { font-size: 12px; color: var(--grafito); }
+.code-tag { background: transparent; border: 1px solid var(--linea); color: var(--tinta); font-weight: 500; border-radius: 6px; }
+.table-footer { background: var(--papel); color: var(--grafito); font-size: 13px; }
+
+/* ESTADOS */
+.group-status, .enrollment-status, .tag-active, .read-only-label, .subject-credit {
+  border-radius: 99px; font-size: 12px; font-weight: 600; padding: 4px 10px; border: 0;
+}
+.group-status.borrador, .enrollment-status.finalizada, .read-only-label, .subject-credit { background: var(--tiza); color: var(--grafito); }
+.group-status.abierto, .enrollment-status.activa, .tag-active { background: var(--aprobado-fondo); color: var(--aprobado); }
+.group-status.cerrado, .enrollment-status.retirada { background: var(--alerta-fondo); color: var(--alerta); }
+.final-grade { border-radius: var(--radio-control); background: var(--aprobado-fondo); color: var(--aprobado); font-weight: 700; }
+.final-grade.low { background: var(--alerta-fondo); color: var(--alerta); }
+.report-table .report-pass { color: var(--aprobado); }
+.report-table .report-fail { color: var(--alerta); }
+.report-table .report-pending { color: #8a6a12; }
+#enrollment-capacity { color: var(--pizarra); }
+
+/* CATÁLOGOS */
+.catalog-card { background: var(--papel); border-color: var(--linea); border-radius: var(--radio); min-height: 150px; padding: 22px; }
+.catalog-card:hover { transform: none; box-shadow: none; border-color: var(--pizarra); }
+.catalog-card h3 { font-size: 17px; font-weight: 700; }
+.catalog-card p { font-size: 13px; color: var(--grafito); }
+.catalog-card { padding-bottom: 22px; }
+.teacher-hover, .teacher-link, .profile-email { color: var(--pizarra); border-bottom-color: #b9c5c0; }
+.teacher-profile { border-radius: var(--radio-control); box-shadow: 0 12px 28px #18211e1f; }
+.profile-grid > div { background: var(--tiza); border-color: var(--linea); border-radius: var(--radio-control); }
+
+/* ALERTAS */
+.flash-message { background: #fdf6dc; border-color: #f1df9c; color: #6b5512; border-radius: var(--radio-control); }
+.toast { background: var(--tinta); border-radius: var(--radio-control); box-shadow: 0 12px 28px #18211e33; font-size: 13px; }
+.form-error { background: var(--alerta-fondo); color: var(--alerta); font-size: 13px; }
+
+/* INICIO DE SESIÓN: una pizarra cuadriculada a pantalla completa */
+.overlay {
+  backdrop-filter: none;
+  background:
+    linear-gradient(#ffffff0d 1px, transparent 1px) 0 0 / 32px 32px,
+    linear-gradient(90deg, #ffffff0d 1px, transparent 1px) 0 0 / 32px 32px,
+    var(--pizarra);
+}
+.login-card { width: min(100%, 440px); padding: 36px 40px; border-radius: var(--radio); box-shadow: 0 30px 60px #0c181533; }
+.login-logo { width: 64px; height: 64px; margin: 0 0 20px; }
+.login-card h2 { margin: 0 0 8px; font-size: 28px; font-weight: 700; letter-spacing: -.02em; }
+.login-card > p { font-size: 14px; color: var(--grafito); line-height: 1.55; }
+.login-card form label { font-size: 13px; font-weight: 600; color: var(--tinta); }
+.login-card input, .form-grid input, .form-grid select {
+  border-color: var(--linea); border-radius: var(--radio-control); font-size: 14px; padding: 12px 13px;
+}
+.login-card input:focus, .form-grid input:focus, .form-grid select:focus { border-color: var(--pizarra); box-shadow: 0 0 0 3px #f5cf4e80; }
+.login-note { border-top-color: var(--linea); color: var(--grafito); font-size: 12px; }
+.demo-access { border: 0; background: var(--tiza); border-radius: var(--radio-control); font-size: 13px; }
+.demo-access > span { color: var(--grafito); }
+.demo-access code { background: var(--resaltador); color: var(--tinta); font-family: inherit; font-weight: 600; }
+.demo-buttons { grid-template-columns: 1fr; gap: 6px; }
+.demo-button { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 10px 12px; border-color: var(--linea); border-radius: var(--radio-control); }
+.demo-button:hover, .demo-button:focus-visible { border-color: var(--pizarra); box-shadow: 0 0 0 3px #f5cf4e80; }
+.demo-button strong { font-size: 13px; }
+.demo-button small { font-size: 11px; color: var(--grafito); }
+
+/* MODALES Y FORMULARIOS */
+.modal-backdrop { background: #18211e99; backdrop-filter: none; }
+.form-modal { border-radius: var(--radio); box-shadow: 0 30px 60px #0c181540; }
+.modal-header { background: var(--papel); border-bottom-color: var(--linea); }
+.modal-header h2 { margin: 0 0 6px; font-size: 22px; font-weight: 700; letter-spacing: -.02em; }
+.modal-header p { font-size: 13px; color: var(--grafito); }
+.form-grid label { color: var(--tinta); font-size: 13px; font-weight: 600; }
+.form-grid label span { color: var(--alerta); }
+.form-grid input[readonly], #group-form select:disabled { background: var(--tiza); color: var(--grafito); }
+.form-help { font-size: 13px; color: var(--grafito); }
+.modal-actions { border-top-color: var(--linea); }
+
+/* RESPONSIVO */
+@media (max-width: 1150px) {
+  .main-content { padding: 32px 28px 64px; }
+  .topbar { padding: 0 28px; }
+}
+@media (max-width: 850px) {
+  .sidebar { box-shadow: 8px 0 24px #0c181533; }
+  .topbar { height: 64px; }
+  .main-content { padding: 26px 20px 56px; }
+  .welcome-copy { padding: 34px 28px; }
+}
+@media (max-width: 560px) {
+  .topbar { padding: 0 16px; }
+  .main-content { padding: 22px 14px 48px; }
+  .welcome-copy h2 { font-size: 28px; }
+  .stat-card > strong, .module-stat > strong { font-size: 38px; }
+  .login-card { padding: 28px 22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+.demo-access:not([hidden]) + .login-note { display: none; }
+
+/* El logo tiene letras oscuras: sobre la pizarra va en una placa blanca. */
+.brand-logo { background: var(--papel); border-radius: 10px; padding: 4px; }
+.banner-art { display: none; }
+.nav-link { font-size: 13.5px; line-height: 1.3; }
+
+/* Cifras de cada módulo: el número debajo de su rótulo. */
+.stat-card > strong, .module-stat > strong { display: block; width: fit-content; }
+.module-stat-icon { margin-bottom: 14px; }
+/* Rótulos que vienen en mayúsculas en el HTML: en tipo oración. */
+.module-stat small, .data-table th, .intro-number small {
+  display: block; text-transform: lowercase; letter-spacing: 0; font-weight: 600; font-size: 13px; color: var(--grafito);
+}
+.module-stat small::first-letter, .data-table th::first-letter, .intro-number small::first-letter { text-transform: uppercase; }
+.data-table th { display: table-cell; font-size: 12px; }
+/* Estos encabezados solo repetían el título de la página. */
+.grade-hero, .report-hero { display: none !important; }
