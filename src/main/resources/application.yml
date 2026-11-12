@@ -7,6 +7,10 @@ spring:
     password: ${DB_PASSWORD:}
     hikari:
       maximum-pool-size: 5
+      # Sin conexiones fijas: las inactivas se cierran al minuto para que Neon
+      # (base de datos en la nube) pueda suspenderse y no gaste horas de cómputo.
+      minimum-idle: 0
+      idle-timeout: 60000
   flyway:
     enabled: true
     locations: classpath:db/migration
