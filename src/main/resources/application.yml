@@ -15,6 +15,13 @@ spring:
       ddl-auto: validate
     open-in-view: false
     show-sql: false
+springdoc:
+  api-docs:
+    enabled: ${API_DOCS:true}
+  swagger-ui:
+    enabled: ${API_DOCS:true}
+    operations-sorter: alpha
+    try-it-out-enabled: false
 server:
   address: ${BIND_ADDRESS:127.0.0.1}
   port: ${PORT:8080}

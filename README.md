@@ -3,13 +3,14 @@
 ![Java 21](https://img.shields.io/badge/Java-21-orange)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.1.1-6DB33F)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-336791)
-![Tests](https://img.shields.io/badge/tests-97%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-100%20passing-brightgreen)
 [![Demo](https://img.shields.io/badge/demo-en%20l%C3%ADnea-1E3A34)](https://unigest-d9zx.onrender.com)
+[![API](https://img.shields.io/badge/API-Swagger-85EA2D)](https://unigest-d9zx.onrender.com/swagger-ui.html)
 [![CI](https://github.com/stiven-triana-dev/UniGest/actions/workflows/tests.yml/badge.svg)](https://github.com/stiven-triana-dev/UniGest/actions)
 
 **UniGest** es una aplicación web para administrar procesos académicos universitarios con tres espacios de trabajo: **administración, docencia y estudiantes**. Gestiona matrículas, grupos, evaluaciones, calificaciones y boletines, con acceso controlado según el rol del usuario.
 
-**Versión:** `v0.11.0` · **Pruebas:** 97 automatizadas, 0 fallos · **CI:** GitHub Actions con Java 21 y PostgreSQL 18
+**Versión:** `v0.11.0` · **Pruebas:** 100 automatizadas, 0 fallos · **CI:** GitHub Actions con Java 21 y PostgreSQL 18
 
 ## 🌐 Demo en línea
 
@@ -20,6 +21,8 @@
 | Administración | `admin@demo.test` | Estudiantes, docentes, grupos, matrículas, evaluaciones, notas y reportes |
 | Docente | `docente@demo.test` | Sus grupos, el plan de evaluación y el libro de notas |
 | Estudiante | `estudiante@demo.test` | Su boletín por periodo, con notas publicadas y definitivas |
+
+**Documentación de la API:** [unigest-d9zx.onrender.com/swagger-ui.html](https://unigest-d9zx.onrender.com/swagger-ui.html), con todas las rutas REST agrupadas por módulo. Para consultar las rutas protegidas, primero inicia sesión en la demo.
 
 Contraseña de las tres cuentas: `Demo-UniGest-2026`. Los datos son ficticios y se reinician cada vez que el servicio arranca, y las cuentas de prueba no se pueden modificar. La primera visita puede tardar cerca de un minuto mientras el servidor gratuito despierta.
 
@@ -33,6 +36,10 @@ Contraseña de las tres cuentas: `Demo-UniGest-2026`. Los datos son ficticios y 
 | --- | --- |
 | ![Portal docente](docs/img/portal-docente.png) | ![Boletín del estudiante](docs/img/boletin.png) |
 
+| Documentación de la API (Swagger) |
+| --- |
+| ![Documentación de la API con Swagger](docs/img/swagger.png) |
+
 ## ✨ Funcionalidades
 
 | Rol | Qué puede hacer |
@@ -41,13 +48,14 @@ Contraseña de las tres cuentas: `Demo-UniGest-2026`. Los datos son ficticios y 
 | **Docente** | Consultar sus grupos asignados; crear y publicar evaluaciones; registrar calificaciones y ver resultados. |
 | **Estudiante** | Consultar sus periodos, asignaturas, notas publicadas y boletines; imprimir o guardar el boletín como PDF. |
 
-Además incluye cálculo de notas definitivas, historial de correcciones de calificaciones, desactivación lógica de cuentas y exportación de reportes a CSV.
+Además incluye cálculo de notas definitivas (y, en materias en curso, la nota que le falta al estudiante para aprobar), historial de correcciones de calificaciones, desactivación lógica de cuentas y exportación de reportes a CSV.
 
 ## 🛠️ Tecnologías
 
 | Capa | Tecnologías |
 | --- | --- |
 | Backend | Java 21, Spring Boot 4.1.1, Spring MVC, Spring Data JPA |
+| Documentación | OpenAPI 3.1 con springdoc y Swagger UI |
 | Seguridad | Spring Security, sesiones HTTP, CSRF, BCrypt, control de acceso por roles |
 | Base de datos | PostgreSQL 18, migraciones con Flyway |
 | Frontend | HTML, CSS y JavaScript nativo (sin frameworks) |
@@ -156,7 +164,7 @@ mvn clean test
 Resultado verificado:
 
 ```text
-Tests run: 97, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 100, Failures: 0, Errors: 0, Skipped: 0
 BUILD SUCCESS
 ```
 
@@ -171,12 +179,13 @@ Las pruebas cubren lógica de negocio (cálculo de notas, matrículas, cupos), s
 - Cookies `HttpOnly` y `SameSite=Lax`; la sesión expira a los 30 minutos de inactividad.
 - Por defecto escucha solo en `127.0.0.1`.
 - Los errores no exponen mensajes internos ni trazas.
+- La documentación de la API (`/swagger-ui.html`) es pública, pero no abre los datos: cada ruta sigue exigiendo sesión y rol. Se desactiva con `API_DOCS=false`.
 
 > **Nota:** esta versión está pensada para uso local y demostración. Para exponerla a internet haría falta HTTPS, `SESSION_COOKIE_SECURE=true`, gestión de secretos y un usuario de base de datos con privilegios mínimos.
 
 ## 🗺️ Próximas mejoras
 
-- [ ] Documentación de la API con OpenAPI/Swagger
+- [x] Documentación de la API con OpenAPI/Swagger
 - [ ] `docker-compose` para levantar la aplicación y PostgreSQL con un solo comando
 - [ ] Paginación y filtros en los listados
 - [x] Despliegue en línea con HTTPS (Render + Neon, con Docker)
