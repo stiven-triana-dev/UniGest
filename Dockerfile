@@ -15,7 +15,12 @@ COPY --from=build /app/target/*.jar unigest.jar
 
 # Memoria: el plan gratuito de Render da 512 MB; con la mitad para datos (256 MB)
 # UniGest usa unos 320 MB en total, medido con la demo cargada.
-ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=50 -XX:MaxMetaspaceSize=160m -XX:+UseSerialGC -Xss512k"
+#
+# Arranque con poca CPU (Render gratis da 0,1 CPU): TieredStopAtLevel=1 usa solo el
+# compilador JIT liviano (C1) y la inicialización perezosa crea cada componente de Spring
+# cuando se necesita. Medido en local con 1 núcleo: el arranque baja de ~16 s a ~4,5 s,
+# y las 100 pruebas pasan con esta configuración.
+ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=50 -XX:MaxMetaspaceSize=160m -XX:+UseSerialGC -Xss512k -XX:TieredStopAtLevel=1"
 
 # Arranque rápido con CDS (Class Data Sharing): al construir la imagen se arranca la
 # aplicación una vez y se guardan sus clases ya cargadas en app.jsa. Medido en local,
@@ -38,6 +43,7 @@ USER unigest
 # Dentro del contenedor hay que escuchar en todas las interfaces; Render define PORT.
 ENV BIND_ADDRESS=0.0.0.0 \
     PORT=8080 \
-    SESSION_COOKIE_SECURE=true
+    SESSION_COOKIE_SECURE=true \
+    SPRING_MAIN_LAZY_INITIALIZATION=true
 EXPOSE 8080
 ENTRYPOINT ["java", "-XX:SharedArchiveFile=/app/app.jsa", "-Xlog:cds=off", "-jar", "/app/app/unigest.jar"]
