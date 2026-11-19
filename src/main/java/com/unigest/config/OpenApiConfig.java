@@ -12,11 +12,9 @@ import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/** Datos que muestra la documentación de la API en /swagger-ui.html. */
 @Configuration
 public class OpenApiConfig {
 
-    /** Nombre legible y descripción de cada grupo de rutas, numerados en el orden en que se muestran. */
     private static final Map<String, String[]> GRUPOS = Map.ofEntries(
             Map.entry("sesion-controller", new String[] {"1. Sesión", "Inicio y cierre de sesión, token CSRF y usuario actual."}),
             Map.entry("acceso-controller", new String[] {"2. Accesos", "Credenciales de docentes y estudiantes y cambio de contraseña."}),
@@ -51,7 +49,6 @@ public class OpenApiConfig {
                 .license(new License().name("Proyecto educativo")));
     }
 
-    /** Cambia los nombres técnicos ("grupo-controller") por nombres en español con descripción. */
     @Bean
     OpenApiCustomizer gruposEnEspanol() {
         return api -> {

@@ -13,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-/** Carga los datos de la demo dentro de una transacción que se revierte al final. */
 @SpringBootTest
 @Transactional
 @Rollback
@@ -39,13 +38,11 @@ class DemoInicializadorIntegracionTest {
         assertEquals(1, contar("SELECT COUNT(*)::int FROM periodos WHERE estado = 'EN_CURSO'"));
         assertEquals(1, contar("SELECT COUNT(*)::int FROM historial_calificaciones"));
 
-        // En cada grupo con evaluaciones, los porcentajes suman 100 (regla para publicar).
         List<BigDecimal> sumas = jdbc.queryForList(
                 "SELECT SUM(ponderacion) FROM evaluaciones GROUP BY grupo_id", BigDecimal.class);
         assertEquals(6, sumas.size());
         sumas.forEach(suma -> assertEquals(0, suma.compareTo(new BigDecimal("100.00"))));
 
-        // Toda evaluación publicada tiene nota para cada matrícula activa o finalizada.
         assertEquals(0, contar("""
                 SELECT COUNT(*)::int FROM evaluaciones e
                 JOIN matriculas m ON m.grupo_id = e.grupo_id AND m.estado IN ('ACTIVA','FINALIZADA')

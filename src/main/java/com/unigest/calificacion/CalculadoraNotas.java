@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Collection;
 
-/** Cálculo de un promedio definitivo sólo para evaluaciones completas y publicables. */
 public final class CalculadoraNotas {
     private static final BigDecimal CIEN = new BigDecimal("100.00");
     private static final BigDecimal MAX = new BigDecimal("5.00");

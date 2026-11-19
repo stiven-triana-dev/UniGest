@@ -25,7 +25,6 @@ public class ApiErrors {
     }
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Map<String, String>> conflictoBaseDatos(DataIntegrityViolationException e) {
-        // No exponer SQL, nombres de columnas ni detalles internos al navegador.
         return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", "Datos duplicados o referencias inválidas"));
     }
 }

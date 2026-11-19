@@ -183,6 +183,22 @@ Las pruebas cubren lógica de negocio (cálculo de notas, matrículas, cupos), s
 
 > **Nota:** esta versión está pensada para uso local y demostración. Para exponerla a internet haría falta HTTPS, `SESSION_COOKIE_SECURE=true`, gestión de secretos y un usuario de base de datos con privilegios mínimos.
 
+## Lo que aprendí con este proyecto
+
+UniGest fue mi primer proyecto serio con Java y Spring Boot. Lo armé por capas (controlador, servicio, repositorio) y con eso entendí para qué sirve cada una: el controlador solo recibe y responde, la regla de negocio vive en el servicio y el repositorio habla con PostgreSQL. Las reglas que más trabajo me dieron fueron las de las notas: un promedio solo es definitivo si todas las evaluaciones están completas, y nadie puede matricularse en un grupo lleno.
+
+Flyway me enseñó a tratar la base de datos como código: cada cambio es una migración numerada (de V1 a V5) y, una vez aplicada, no se vuelve a editar, porque Flyway compara cada archivo y la aplicación no arranca si alguno cambió.
+
+En seguridad usé Spring Security con sesiones, contraseñas con BCrypt y tres roles. Aprendí que no basta con proteger la ruta: dentro del servicio también verifico que un docente solo vea sus grupos y un estudiante solo sus notas publicadas. Las pruebas de autorización comprueban, por ejemplo, que un estudiante recibe 403 en las rutas de administración.
+
+Las primeras pruebas de integración dependían de identificadores fijos en la base, lo que las hacía frágiles. Las cambié para que cada prueba cree sus propios datos dentro de una transacción que se deshace al terminar. Hoy son 100 pruebas con JUnit, Mockito y MockMvc, y GitHub Actions las corre con un PostgreSQL real en cada cambio.
+
+Publicarlo gratis en Render trajo sus propios problemas. Tuve que limitar la memoria de Java en el Dockerfile para no pasarme de los 512 MB del plan. Con tan poca CPU tardaba mucho en arrancar; con CDS, el compilador C1 y la inicialización perezosa de Spring bajó de 16 a unos 4,5 segundos en una prueba local con un solo núcleo. La base de Neon no se suspendía nunca porque el pool de conexiones dejaba conexiones abiertas; las configuré para que se cierren cuando no se usan.
+
+Para que la demo no tarde en abrir, programé una visita periódica con cron-job.org. Falló toda una mañana con «salida demasiado grande»: mientras dormía, Render devolvía su página de «despertando» en HTML. Lo resolví pidiendo la respuesta en JSON, y así Render espera a que la aplicación arranque.
+
+También aprendí cosas pequeñas pero reales: normalizar los saltos de línea entre Windows y Linux con `.gitattributes`, no dejar rutas de mi computador en los scripts, no publicar versiones viejas del JavaScript en `static/`, y hacer que la demo pública reinicie sus datos en cada arranque para que nadie pueda dañarla.
+
 ## 🗺️ Próximas mejoras
 
 - [x] Documentación de la API con OpenAPI/Swagger

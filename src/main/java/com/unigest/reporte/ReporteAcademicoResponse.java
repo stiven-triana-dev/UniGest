@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-/** DTOs de solo lectura: nunca exponen correos, documentos o credenciales. */
 public final class ReporteAcademicoResponse {
     private ReporteAcademicoResponse() { }
 

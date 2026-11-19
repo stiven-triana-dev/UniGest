@@ -39,7 +39,6 @@ public class AdministradorInicializador implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
 
-        // No crear cuentas si no se configura el administrador inicial.
         if (correo.isBlank() && clave.isBlank()) {
             return;
         }

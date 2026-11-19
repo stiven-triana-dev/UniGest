@@ -3,7 +3,6 @@ package com.unigest.matricula;
 import java.util.UUID;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-/** Datos de integración aislados: no dependen de IDs ni registros del usuario. */
 final class EscenarioMatricula {
     record Datos(Long grupoId, Long estudianteSinMatriculaId) { }
 

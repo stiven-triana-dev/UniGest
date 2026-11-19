@@ -14,7 +14,6 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-/** La documentación de la API es pública, pero no abre las rutas privadas. */
 @SpringBootTest
 class DocumentacionApiTest {
 

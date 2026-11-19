@@ -116,7 +116,6 @@
   function renderGroups() {
     clear('teacher-group');option($('teacher-group'),'','Selecciona un grupo');
     state.groups.forEach(g=>option($('teacher-group'),g.id,`${g.codigo} — ${g.asignatura} (${g.periodo})`));
-    // Sin grupo elegido, abre el primero para que el docente vea su consolidado de una vez.
     $('teacher-group').value=state.group && state.groups.some(g=>String(g.id)===state.group)?state.group
       :state.groups.length?String(state.groups[0].id):'';
     $('new-eval').disabled=!$('teacher-group').value;
@@ -148,7 +147,6 @@
       state.evaluations=evals;
       $('teacher-summary').textContent=`${report.grupoCodigo} · ${report.asignaturaNombre} · ${report.periodoNombre}`;
       renderEvaluations();renderTeacherReport(report);
-      // Abre la primera evaluación para que el libro de notas no arranque vacío.
       if(state.evaluations.length){$('teacher-eval').value=String(state.evaluations[0].id);await loadGrades();}
     }catch(e){if(seq===state.seq)notice(e.message);}
   }
@@ -261,7 +259,6 @@
         $('student-periods').append(b);
       });
       if(!list.length){notice('Todavía no tienes matrículas activas o finalizadas.');return;}
-      // El período más reciente abre por defecto: el estudiante ve sus notas sin buscar nada.
       await selectPeriod(list[list.length-1].id);
     }catch(e){notice(e.message);}
   }
@@ -270,7 +267,6 @@
     $('student-periods').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.period===state.period)));
     await loadStudentReport();
   }
-  // Nota de 0 a 5 con una barra; la marca vertical es el mínimo aprobatorio (3,0).
   function gradeBar(value){
     const wrap=node('span',null,'nota');
     if(value==null){wrap.classList.add('vacia');wrap.append(node('b','—'));return wrap;}
@@ -300,7 +296,6 @@
 
     const evaluado=m.notas.reduce((a,n)=>a+Number(n.ponderacion||0),0);
     const acumulado=m.notas.reduce((a,n)=>a+Number(n.nota||0)*Number(n.ponderacion||0)/100,0);
-    // Barra de avance: cada tramo es una evaluación publicada, del ancho de su porcentaje.
     const avance=node('div',null,'avance');avance.setAttribute('role','img');
     avance.setAttribute('aria-label',`Evaluado ${Math.round(evaluado)} % del curso`);
     for(const n of m.notas){
@@ -330,7 +325,6 @@
     card.append(list);
     return card;
   }
-  // Porcentaje evaluado promedio de las materias, ponderado por créditos.
   function avancePeriodo(materias){
     const cr=materias.reduce((a,m)=>a+Number(m.creditos||0),0)||1;
     return materias.reduce((a,m)=>a+Number(m.creditos||0)*m.notas.reduce((s,n)=>s+Number(n.ponderacion||0),0),0)/cr;

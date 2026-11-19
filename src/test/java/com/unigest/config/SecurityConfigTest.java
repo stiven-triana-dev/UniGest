@@ -14,7 +14,6 @@ import static org.mockito.Mockito.*;
 
 class SecurityConfigTest {
 
-    // 1. Cargar administrador desde PostgreSQL (simulado).
     @Test
     void debeCargarAdministradorDesdeRepositorio() {
 
@@ -49,7 +48,6 @@ class SecurityConfigTest {
         assertTrue(usuario.isEnabled());
     }
 
-    // 2. Rechazar usuarios que no existen.
     @Test
     void debeRechazarUsuarioInexistente() {
 
@@ -67,7 +65,6 @@ class SecurityConfigTest {
         );
     }
 
-    // 3. Impedir el acceso de usuarios inactivos.
     @Test
     void debeDeshabilitarUsuarioInactivo() {
 

@@ -40,7 +40,6 @@ class GrupoServiceTest {
     @InjectMocks
     private GrupoService servicio;
 
-    // Datos ficticios para las pruebas.
     private GrupoRequest solicitud() {
         return new GrupoRequest(
                 1L,
@@ -58,7 +57,6 @@ class GrupoServiceTest {
         when(asignatura.getNombre())
                 .thenReturn("Fundamentos de Programacion");
 
-        // La asignatura debe estar activa.
         when(asignatura.isActiva()).thenReturn(true);
 
         return asignatura;
@@ -87,7 +85,6 @@ class GrupoServiceTest {
         return periodo;
     }
 
-    // 1. Registrar correctamente un grupo.
     @Test
     void registraGrupoCorrectamente() {
         Asignatura asignatura = asignatura();
@@ -116,7 +113,6 @@ class GrupoServiceTest {
         verify(grupos).save(any(Grupo.class));
     }
 
-    // 2. Rechazar un codigo duplicado.
     @Test
     void rechazaCodigoDuplicado() {
         Asignatura asignatura = mock(Asignatura.class);
@@ -158,7 +154,6 @@ class GrupoServiceTest {
         verify(grupos, never()).save(any(Grupo.class));
     }
 
-    // 3. Rechazar cupos superiores al limite.
     @Test
     void rechazaCupoInvalido() {
         GrupoRequest solicitud = new GrupoRequest(
@@ -178,7 +173,6 @@ class GrupoServiceTest {
         verify(grupos, never()).save(any(Grupo.class));
     }
 
-    // 4. Impedir asignar un docente inactivo.
     @Test
     void rechazaDocenteInactivo() {
         Asignatura asignatura = mock(Asignatura.class);
@@ -209,7 +203,6 @@ class GrupoServiceTest {
         verify(grupos, never()).save(any(Grupo.class));
     }
 
-    // 5. Actualizar el cupo de un grupo existente.
     @Test
     void actualizaCupoCorrectamente() {
         Asignatura asignatura = mock(Asignatura.class);
@@ -254,7 +247,6 @@ class GrupoServiceTest {
         assertEquals("BORRADOR", resultado.estado());
     }
 
-    // 6. Cambiar el grupo de BORRADOR a ABIERTO.
     @Test
     void abreGrupoCorrectamente() {
         Asignatura asignatura = mock(Asignatura.class);
@@ -287,7 +279,6 @@ class GrupoServiceTest {
         assertEquals("ABIERTO", grupo.getEstado());
     }
 
-    // 7. Impedir reabrir un grupo cerrado.
     @Test
     void rechazaReabrirGrupoCerrado() {
         Grupo grupo = mock(Grupo.class);

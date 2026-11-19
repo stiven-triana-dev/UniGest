@@ -14,7 +14,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-/** El alumno nunca elige estudianteId, ni el docente elige su identidad. */
 @RestController
 @RequestMapping("/api/v1/mi-espacio")
 public class MiEspacioController {
@@ -26,7 +25,6 @@ public class MiEspacioController {
         this.cuentas = cuentas;
     }
 
-    /** Comprueba la clave en el servidor, sin depender de la resolución de beans en SpEL. */
     private void exigirClaveDefinitiva(Authentication autenticacion) {
         if (!cuentas.claveDefinitiva(autenticacion.getName())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,

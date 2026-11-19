@@ -20,11 +20,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
-/**
- * En modo demo vacía las tablas académicas y carga {@code demo/datos-demo.sql} cada vez
- * que la aplicación arranca. Así, lo que cambien los visitantes dura hasta el siguiente
- * reinicio (en el plan gratuito de Render, tras unos minutos sin visitas).
- */
 @Component
 public class DemoInicializador implements ApplicationRunner {
 
@@ -54,7 +49,6 @@ public class DemoInicializador implements ApplicationRunner {
         log.info("Demo pública cargada con datos ficticios");
     }
 
-    /** Vacía los datos académicos y carga los de la demo. Debe llamarse dentro de una transacción. */
     public void reiniciar() {
         String sql = leerScript()
                 .replace("{{CLAVE_DEMO}}", encoder.encode(demo.getClave()))
@@ -74,7 +68,6 @@ public class DemoInicializador implements ApplicationRunner {
         }
     }
 
-    /** Contraseña que nadie conoce: esas cuentas existen para poblar la demo, no para entrar. */
     private static String claveAleatoria() {
         byte[] bytes = new byte[24];
         new SecureRandom().nextBytes(bytes);

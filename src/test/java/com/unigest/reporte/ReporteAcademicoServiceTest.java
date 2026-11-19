@@ -52,8 +52,6 @@ class ReporteAcademicoServiceTest {
     @InjectMocks
     ReporteAcademicoService servicio;
 
-    // DATOS SIMULADOS PARA LAS PRUEBAS
-
     private Grupo grupo(Long id) {
         Grupo g = mock(Grupo.class, RETURNS_DEEP_STUBS);
 
@@ -146,12 +144,9 @@ class ReporteAcademicoServiceTest {
         return c;
     }
 
-    // PRUEBA 1: CÁLCULO DE LA DEFINITIVA
-
     @Test
     void reporteGrupoCalculaDefinitiva474YEstadisticas() {
 
-        // Primero crear todos los datos simulados.
         Grupo g = grupo(1L);
 
         Estudiante e = estudiante();
@@ -185,7 +180,6 @@ class ReporteAcademicoServiceTest {
             nota(13L, "4.80")
         );
 
-        // Después configurar los repositorios.
         when(grupos.findById(1L))
             .thenReturn(Optional.of(g));
 
@@ -198,10 +192,8 @@ class ReporteAcademicoServiceTest {
         when(calificaciones.findByGrupoId(1L))
             .thenReturn(notas);
 
-        // Ejecutar el servicio.
         var r = servicio.reporteGrupo(1L);
 
-        // Comprobar resultados.
         assertEquals(
             new BigDecimal("4.74"),
             r.estudiantes().getFirst().definitiva()
@@ -221,8 +213,6 @@ class ReporteAcademicoServiceTest {
             r.resumen().promedio()
         );
     }
-
-    // PRUEBA 2: NOTAS INCOMPLETAS
 
     @Test
     void notaIncompletaSeReportaPendienteSinInventarla() {
@@ -272,8 +262,6 @@ class ReporteAcademicoServiceTest {
         );
     }
 
-    // PRUEBA 3: EVALUACIÓN EN BORRADOR
-
     @Test
     void evaluacionEnBorradorBloqueaDefinitivaAunqueTengaNota() {
 
@@ -315,8 +303,6 @@ class ReporteAcademicoServiceTest {
         );
     }
 
-    // PRUEBA 4: MATRÍCULA RETIRADA
-
     @Test
     void matriculaRetiradaNoApareceEnReporteDeGrupo() {
 
@@ -350,8 +336,6 @@ class ReporteAcademicoServiceTest {
             r.resumen().total()
         );
     }
-
-    // PRUEBA 5: ESTUDIANTES DEL PERÍODO
 
     @Test
     void estudiantesDelPeriodoSonUnicosYOmitenRetiros() {
@@ -402,8 +386,6 @@ class ReporteAcademicoServiceTest {
         );
     }
 
-    // PRUEBA 6: BOLETÍN SIN MATERIAS
-
     @Test
     void boletinSinMateriasDevuelveResumenVacio() {
 
@@ -442,8 +424,6 @@ class ReporteAcademicoServiceTest {
         );
     }
 
-    // PRUEBA 7: PERÍODO INEXISTENTE
-
     @Test
     void periodoInexistenteResponde404() {
 
@@ -460,8 +440,6 @@ class ReporteAcademicoServiceTest {
             ex.getStatusCode()
         );
     }
-
-    // PRUEBA 8: GRUPO INEXISTENTE
 
     @Test
     void grupoInexistenteResponde404() {

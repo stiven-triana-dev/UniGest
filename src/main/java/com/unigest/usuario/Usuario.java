@@ -57,12 +57,10 @@ public class Usuario {
     }
     public void desactivar() { this.activo = false; this.actualizadoEn = OffsetDateTime.now(); }
 
-// Consultar contraseña para autenticación
 String obtenerClaveHash() {
     return claveHash;
 }
 
-// Consultar los roles del usuario
 Set<Rol> obtenerRoles() {
     return Set.copyOf(roles);
 }
