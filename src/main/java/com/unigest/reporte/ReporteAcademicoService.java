@@ -34,7 +34,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/** Etapa 9: reportes de solo lectura basados en las calificaciones existentes. */
 @Service
 @Transactional(readOnly = true)
 public class ReporteAcademicoService {
@@ -159,7 +158,6 @@ public class ReporteAcademicoService {
             e.getPonderacion(), notas.get(e.getId()))).toList();
     }
 
-    /** No publica definitiva cuando hay borradores, peso incompleto o notas faltantes. */
     private BigDecimal definitiva(List<Evaluacion> actividades, Map<Long, BigDecimal> notas) {
         if (actividades.isEmpty() || actividades.stream().anyMatch(e -> !e.isPublicada()) ||
             actividades.stream().map(Evaluacion::getPonderacion)

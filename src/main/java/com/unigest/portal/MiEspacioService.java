@@ -32,7 +32,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-/** El ámbito de acceso se determina en el servidor a partir de la sesión. */
 @Service
 @Transactional(readOnly = true)
 public class MiEspacioService {
@@ -263,7 +262,6 @@ public class MiEspacioService {
             .toList();
     }
 
-    /** El estudiante solo ve SUS notas publicadas, nunca borradores. */
     public ReporteAcademicoResponse.Boletin miBoletin(
             String correo,
             Long periodoId) {

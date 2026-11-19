@@ -1,4 +1,3 @@
-
 package com.unigest.matricula;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,7 +14,6 @@ public interface MatriculaRepository
 
     List<Matricula> findByEstudianteIdOrderByIdAsc(Long estudianteId);
 
-    // Etapa 9: estudiantes con matrícula en un período académico.
     List<Matricula> findByGrupoPeriodoIdOrderByIdAsc(Long periodoId);
 
     Optional<Matricula> findByEstudianteIdAndGrupoId(

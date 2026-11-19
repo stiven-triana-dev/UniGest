@@ -1,4 +1,3 @@
-
 (() => {
   'use strict';
 
@@ -43,7 +42,6 @@
       'Consulta resultados por grupo y estudiante, exporta e imprime.', 'Reportes Académicos']
   };
 
-  // UTILIDADES Y SEGURIDAD
   const esc = v => String(v ?? '').replace(/[&<>"']/g, c =>
     ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 
@@ -154,7 +152,6 @@
     return request(`${API}${path}`, { ...options, method, headers });
   }
 
-  // AUTENTICACIÓN
   function signedIn(user) {
     s.ok = true;
     set('account-name', user.correo || 'Administrador');
@@ -312,7 +309,6 @@
     }
   }
 
-  // NAVEGACIÓN
   function navigate(view) {
     if (!views[view]) return;
     s.view = view;
@@ -348,7 +344,6 @@
     set('student-programs', s.programs.length);
   }
 
-  // PROGRAMAS Y ASIGNATURAS
   async function catalogs() {
     try {
       const [programs,subjects] = await Promise.all([
@@ -424,7 +419,6 @@
     filter.value = previous[1];
   }
 
-  // ESTUDIANTES
   async function students() {
     if (!s.ok) return;
     const seq = ++s.seq;
@@ -582,7 +576,6 @@
     }
   }
 
-  // DOCENTES Y ESTADÍSTICAS
   async function teachers() {
     if (!s.ok) return;
     $('teachers-body').innerHTML = empty(5,'Consultando docentes...');
@@ -714,7 +707,6 @@
     }
   }
 
-  // GRUPOS ACADÉMICOS Y FICHAS DE DOCENTES
   async function groups() {
     if (!s.ok) return;
     $('groups-body').innerHTML = empty(7,'Consultando grupos...');
@@ -945,7 +937,6 @@
     }
   }
 
-  // MATRÍCULAS
   function updateEnrollmentGroupOptions() {
     const filter = $('enrollment-group-filter');
     const current = s.enrollmentGroup;
@@ -1177,9 +1168,6 @@
     }
   }
 
-  // ETAPA 8 — EVALUACIONES, NOTAS Y DEFINITIVAS
-
-  // CORREGIDO: CARGA Y CONSERVACIÓN DEL GRUPO
   async function loadEvaluationGroups() {
     try {
       const data = await api('/grupos');
@@ -1200,7 +1188,6 @@
         s.gradeGroup = previous;
         $('grade-group').value = previous;
       } else if (s.groups.length) {
-        // Sin selección previa se abre el primer grupo: la pantalla nunca arranca vacía.
         s.gradeGroup = String(s.groups[0].id);
         $('grade-group').value = s.gradeGroup;
       } else {
@@ -1509,7 +1496,6 @@
     if (id === 'grade-modal') s.gradeMatricula = null;
   }
 
-  // ETAPA 9 — REPORTES ACADÉMICOS Y BOLETINES
   const reportNota = n => n == null ? 'Pendiente' : Number(n).toFixed(2);
   const reportEstado = n => n == null ? 'Pendiente' : Number(n) >= 3 ? 'Aprobada' : 'Reprobada';
 
@@ -1517,7 +1503,6 @@
     return gradeBar(n);
   }
 
-  // Nota de 0 a 5 con barra; la marca vertical es el mínimo aprobatorio (3.0).
   function gradeBar(n) {
     if (n == null) return '<span class="nota vacia"><b>Pendiente</b></span>';
     const v = Number(n);
@@ -1540,7 +1525,6 @@
         id:p.id, label:`${p.codigo} — ${p.nombre}`
       })), 'Selecciona un período');
 
-      // Por defecto: el primer grupo y el período en curso, para mostrar datos de una vez.
       s.reportGroup = gruposList.some(g => String(g.id) === s.reportGroup)
         ? s.reportGroup : gruposList.length ? String(gruposList[0].id) : '';
       s.reportPeriod = periodosList.some(p => String(p.id) === s.reportPeriod)
@@ -1774,7 +1758,6 @@
     window.print();
   }
 
-  // ETAPA 10: EMISIÓN ADMINISTRATIVA DE CREDENCIALES
   function closeCredentialModal() {
     $('credential-modal').hidden = true;
     $('credential-password').textContent = '';
@@ -1797,7 +1780,6 @@
     }
   }
 
-  // ACTUALIZACIÓN GENERAL
   async function refresh() {
     if (!s.ok) return;
 
@@ -1815,7 +1797,6 @@
     if (s.ok) toast('Información actualizada.');
   }
 
-  // EVENTOS
   function bind() {
     const on = (id,event,fn) => $(id).addEventListener(event,fn);
 
@@ -1855,7 +1836,6 @@
     on('report-group-print','click',() => printAcademicReport('grupo'));
     on('report-student-print','click',() => printAcademicReport('boletin'));
 
-    // Guardar selección del grupo en esta pestaña
     on('grade-group','change',() => {
       s.gradeGroup = $('grade-group').value;
 
@@ -1931,7 +1911,6 @@
       });
     });
 
-    // Los formularios solo se cierran con Escape
     window.addEventListener('keydown',e => {
       if (e.key === 'Escape') {
         ['student','teacher','group','enrollment'].forEach(type => {
@@ -2054,7 +2033,6 @@
     });
   }
 
-  // DEMO PÚBLICA: muestra las cuentas de prueba y entra con un clic.
   async function demoAccess() {
     try {
       const res = await fetch(`${API}/demo`, {credentials:'same-origin'});

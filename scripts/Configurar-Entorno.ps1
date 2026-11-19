@@ -1,4 +1,3 @@
-# Se carga desde los otros scripts para no guardar secretos en el proyecto.
 if ([string]::IsNullOrWhiteSpace($env:DB_URL)) {
     $env:DB_URL = 'jdbc:postgresql://localhost:5432/unigest'
 }

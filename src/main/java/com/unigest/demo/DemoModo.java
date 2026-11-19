@@ -9,10 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
-/**
- * Modo demo pública (UNIGEST_DEMO=true): datos ficticios que se reinician al arrancar
- * y tres cuentas de prueba, una por rol, que nadie puede modificar desde la aplicación.
- */
 @Component
 public class DemoModo {
 
@@ -40,7 +36,6 @@ public class DemoModo {
 
     public record CuentaDemo(String rol, String correo) { }
 
-    /** Cuentas que se muestran en la pantalla de inicio de sesión. */
     public List<CuentaDemo> cuentas() {
         return List.of(
                 new CuentaDemo("Administración", CORREO_ADMIN),
@@ -52,7 +47,6 @@ public class DemoModo {
         return activo && correo != null && CUENTAS.contains(correo.trim().toLowerCase(Locale.ROOT));
     }
 
-    /** Impide cambiar la contraseña, emitir credenciales o desactivar una cuenta de prueba. */
     public void protegerCuenta(String correo) {
         if (esCuentaDemo(correo)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,

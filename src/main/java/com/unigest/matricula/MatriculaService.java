@@ -117,8 +117,6 @@ public class MatriculaService {
     public MatriculaResponse retirar(Long id) {
         Matricula matricula = buscarMatricula(id);
 
-        // Todas las operaciones que afectan cupos usan
-        // el mismo bloqueo de grupo.
         bloquearGrupo(matricula.getGrupo().getId());
 
         if (!"ACTIVA".equals(matricula.getEstado())) {

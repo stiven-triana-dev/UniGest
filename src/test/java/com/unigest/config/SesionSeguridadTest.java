@@ -55,7 +55,6 @@ class SesionSeguridadTest {
                 .thenReturn(Optional.of(admin));
     }
 
-    // 1. Login correcto y sesion persistente.
     @Test
     void loginCorrectoConservaSesion() throws Exception {
         prepararAdministrador();
@@ -82,7 +81,6 @@ class SesionSeguridadTest {
         .andExpect(jsonPath("$.roles[0]").value("ROLE_ADMIN"));
     }
 
-    // 2. Contrasena incorrecta rechazada.
     @Test
     void loginConClaveIncorrectaEsRechazado() throws Exception {
         prepararAdministrador();
@@ -95,7 +93,6 @@ class SesionSeguridadTest {
         .andExpect(status().isUnauthorized());
     }
 
-    // 3. Login sin CSRF rechazado.
     @Test
     void loginSinCsrfEsRechazado() throws Exception {
         mockMvc.perform(
@@ -106,7 +103,6 @@ class SesionSeguridadTest {
         .andExpect(status().isForbidden());
     }
 
-    // 4. Logout invalida la sesion HTTP.
     @Test
     void logoutInvalidaSesion() throws Exception {
         prepararAdministrador();
@@ -135,7 +131,6 @@ class SesionSeguridadTest {
         assertTrue(sesion.isInvalid());
     }
 
-    // Token CSRF disponible sin iniciar sesion.
     @Test
     void tokenCsrfEstaDisponible() throws Exception {
         mockMvc.perform(

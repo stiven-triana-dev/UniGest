@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="es">
 <head>
@@ -18,7 +17,6 @@
 <body>
 
 <div class="app-shell">
-  <!-- MENÚ PRINCIPAL -->
   <aside class="sidebar" id="sidebar" aria-label="Navegación principal">
     <div class="brand">
       <img class="brand-logo" src="./img/logo-unigest.png" alt="Logo UniGest">
@@ -51,7 +49,6 @@
     </div>
   </aside>
 
-  <!-- CONTENIDO PRINCIPAL -->
   <div class="main-shell">
     <header class="topbar">
       <div class="topbar-leading">
@@ -77,7 +74,6 @@
       </div>
       <div class="flash-message" id="flash" role="status" aria-live="polite" hidden></div>
 
-      <!-- INICIO -->
       <section id="view-inicio" class="view active">
         <div class="welcome-banner">
           <div class="welcome-copy">
@@ -137,7 +133,6 @@
         </div>
       </section>
 
-      <!-- ESTUDIANTES -->
       <section id="view-estudiantes" class="view">
         <div class="module-stats" aria-label="Resumen de estudiantes">
           <article class="module-stat"><span class="module-stat-icon">♧</span><small>ESTUDIANTES ACTIVOS</small><strong id="student-total">—</strong><p>Registrados en la institución</p></article>
@@ -170,7 +165,6 @@
         </div>
       </section>
 
-      <!-- DOCENTES -->
       <section id="view-docentes" class="view">
         <div class="module-stats" aria-label="Resumen de docentes">
           <article class="module-stat">
@@ -205,7 +199,6 @@
         </div>
       </section>
 
-      <!-- GRUPOS ACADÉMICOS -->
       <section id="view-grupos" class="view">
         <div class="module-stats" aria-label="Resumen de grupos">
           <article class="module-stat">
@@ -248,7 +241,6 @@
         </div>
       </section>
 
-      <!-- MATRÍCULAS ACADÉMICAS -->
       <section id="view-matriculas" class="view">
         <div class="module-stats" aria-label="Indicadores de matrículas del grupo">
           <article class="module-stat"><span class="module-stat-icon">▣</span><small>MATRÍCULAS ACTIVAS</small><strong id="enroll-active">—</strong><p>Del grupo seleccionado</p></article>
@@ -288,7 +280,6 @@
         </div>
       </section>
 
-      <!-- PROGRAMAS -->
       <section id="view-programas" class="view">
         <div class="module-stats program-stats" aria-label="Resumen de oferta académica">
           <article class="module-stat"><span class="module-stat-icon">▤</span><small>PROGRAMAS</small><strong id="program-total">—</strong><p>Programas del catálogo institucional</p></article>
@@ -309,7 +300,6 @@
         </div>
       </section>
 
-      <!-- ASIGNATURAS -->
       <section id="view-asignaturas" class="view">
         <div class="stats-grid subject-stats" aria-label="Resumen de asignaturas">
           <article class="stat-card subject-stat subject-stat-gold">
@@ -346,7 +336,6 @@
           </div>
         </div>
       </section>
-      <!-- ETAPA 8: EVALUACIONES Y CALIFICACIONES -->
       <section id="view-evaluaciones" class="view">
         <div class="module-intro grade-hero">
           <span class="intro-icon">◇</span>
@@ -385,7 +374,6 @@
           </section>
         </div>
       </section>
-      <!-- ETAPA 9: REPORTES ACADÉMICOS Y BOLETINES -->
       <section id="view-reportes" class="view">
         <div class="module-intro report-hero">
           <span class="intro-icon">▤</span>
@@ -458,10 +446,8 @@
   </div>
 </div>
 
-<!-- Área de impresión: contenido generado sin datos adicionales ni solicitudes externas. -->
 <section id="report-print-sheet" class="report-print-sheet" hidden></section>
 
-<!-- INICIO DE SESIÓN -->
 <div class="overlay" id="login-overlay" role="dialog" aria-modal="true" aria-labelledby="login-title">
   <div class="login-card">
     <img class="login-logo" src="./img/logo-unigest.png" alt="Logo UniGest">
@@ -485,7 +471,6 @@
   </div>
 </div>
 
-<!-- FORMULARIO DE ESTUDIANTES -->
 <div class="modal-backdrop" id="student-modal" hidden>
   <section class="form-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <header class="modal-header">
@@ -512,7 +497,6 @@
   </section>
 </div>
 
-<!-- FORMULARIO DE DOCENTES -->
 <div class="modal-backdrop" id="teacher-modal" hidden>
   <section class="form-modal" role="dialog" aria-modal="true" aria-labelledby="teacher-modal-title">
     <header class="modal-header">
@@ -538,7 +522,6 @@
   </section>
 </div>
 
-<!-- FORMULARIO DE GRUPOS -->
 <div class="modal-backdrop" id="group-modal" hidden>
   <section class="form-modal group-form-modal" role="dialog" aria-modal="true" aria-labelledby="group-modal-title">
     <header class="modal-header">
@@ -563,7 +546,6 @@
   </section>
 </div>
 
-<!-- FORMULARIO DE MATRÍCULAS -->
 <div class="modal-backdrop" id="enrollment-modal" hidden>
   <section class="form-modal" role="dialog" aria-modal="true" aria-labelledby="enrollment-modal-title">
     <header class="modal-header">
@@ -585,7 +567,6 @@
   </section>
 </div>
 
-<!-- FICHA DEL DOCENTE -->
 <div class="modal-backdrop" id="teacher-profile-modal" hidden>
   <section class="form-modal profile-dialog" role="dialog" aria-modal="true" aria-labelledby="profile-name">
     <header class="modal-header"><div><span class="eyebrow">PERSONAL DOCENTE</span><h2 id="profile-name">Ficha institucional</h2><p>Información del registro académico</p></div>
@@ -593,7 +574,6 @@
     <div id="profile-details" class="profile-details"></div>
   </section>
 </div>
-<!-- NUEVA / EDITAR EVALUACIÓN -->
 <div class="modal-backdrop" id="eval-modal" hidden>
   <section class="form-modal" role="dialog" aria-modal="true" aria-labelledby="eval-modal-title">
     <header class="modal-header"><div><span class="eyebrow">ETAPA 8 · EVALUACIONES</span><h2 id="eval-modal-title">Nueva evaluación</h2><p>Asigna una actividad y su ponderación.</p></div>
@@ -611,7 +591,6 @@
     </form>
   </section>
 </div>
-<!-- CALIFICACIÓN -->
 <div class="modal-backdrop" id="grade-modal" hidden>
   <section class="form-modal" role="dialog" aria-modal="true" aria-labelledby="grade-modal-title">
     <header class="modal-header"><div><span class="eyebrow">ETAPA 8 · NOTAS</span><h2 id="grade-modal-title">Calificar estudiante</h2><p>Las correcciones requieren un motivo y quedan auditadas.</p></div>
@@ -628,7 +607,6 @@
   </section>
 </div>
 
-<!-- ETAPA 10 · CONTRASEÑA TEMPORAL: SE MUESTRA UNA ÚNICA VEZ -->
 <div class="modal-backdrop" id="credential-modal" hidden>
   <section class="form-modal" role="dialog" aria-modal="true" aria-labelledby="credential-title">
     <header class="modal-header">

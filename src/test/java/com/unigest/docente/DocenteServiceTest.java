@@ -41,7 +41,6 @@ class DocenteServiceTest {
     @InjectMocks
     private DocenteService servicio;
 
-    // Datos ficticios para las pruebas.
     private DocenteRequest solicitud() {
         return new DocenteRequest(
                 "Ana",
@@ -65,7 +64,6 @@ class DocenteServiceTest {
         );
     }
 
-    // 1. Registrar un docente.
     @Test
     void registraDocenteCorrectamente() {
         when(roles.findByCodigo("DOCENTE"))
@@ -90,7 +88,6 @@ class DocenteServiceTest {
         verify(docentes).save(any(Docente.class));
     }
 
-    // 2. Rechazar correos duplicados.
     @Test
     void rechazaCorreoDuplicado() {
         when(usuarios.existsByCorreoIgnoreCase("ana@unigest.local"))
@@ -107,7 +104,6 @@ class DocenteServiceTest {
         verify(docentes, never()).save(any(Docente.class));
     }
 
-    // 3. Consultar un docente existente.
     @Test
     void consultaDocenteExistente() {
         when(docentes.findById(1L))
@@ -119,7 +115,6 @@ class DocenteServiceTest {
         assertEquals("Ana", resultado.nombres());
     }
 
-    // 4. Actualizar datos conservando la fecha original.
     @Test
     void actualizaDatosSinCambiarFecha() {
         Docente actual = docente();
@@ -148,7 +143,6 @@ class DocenteServiceTest {
         );
     }
 
-    // 5. Desactivar un docente sin eliminarlo.
     @Test
     void desactivaDocenteSinEliminarlo() {
         Docente actual = docente();
@@ -164,7 +158,6 @@ class DocenteServiceTest {
                 .delete(any(Docente.class));
     }
 
-    // 6. Mostrar solamente docentes activos.
     @Test
     void listaSolamenteDocentesActivos() {
         Docente activo = docente();

@@ -23,7 +23,6 @@ public class EstudianteService {
     private final ProgramaRepository programas;
     private final PasswordEncoder passwordEncoder;
 
-// Demo pública: protege las cuentas de prueba. Opcional para las pruebas unitarias.
     private com.unigest.demo.DemoModo demo;
 
     @org.springframework.beans.factory.annotation.Autowired(required = false)
@@ -62,8 +61,6 @@ public class EstudianteService {
         Rol rol = roles.findByCodigo("ESTUDIANTE")
                 .orElseThrow(() -> new IllegalStateException("Falta el rol ESTUDIANTE en la migración inicial"));
 
-        // Credencial aleatoria inaccesible: el login estudiantil NO está implementado.
-        // No se generan claves conocidas ni se incluyen en la respuesta.
         String claveInutilizable = passwordEncoder.encode(UUID.randomUUID().toString() + UUID.randomUUID());
         Usuario usuario = usuarios.save(new Usuario(
                 limpiar(solicitud.nombres()), limpiar(solicitud.apellidos()), correo,
@@ -84,7 +81,6 @@ public class EstudianteService {
         Programa programa = buscarPrograma(solicitud.programaId());
         estudiante.getUsuario().actualizarDatos(limpiar(solicitud.nombres()), limpiar(solicitud.apellidos()), correo);
         estudiante.actualizarDatos(codigo, documento, programa);
-        // La fecha de ingreso es histórica; no se cambia por edición básica.
         return convertir(estudiante);
     }
 

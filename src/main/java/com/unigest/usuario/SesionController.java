@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/auth")
 public class SesionController {
 
-    // Identidad del usuario autenticado.
     @GetMapping("/me")
     public Map<String, Object> usuarioActual(
             Authentication autenticacion) {
@@ -31,7 +30,6 @@ public class SesionController {
         );
     }
 
-    // Token CSRF para el futuro inicio de sesion.
     @GetMapping("/csrf")
     public CsrfToken obtenerTokenCsrf(
             CsrfToken csrfToken) {

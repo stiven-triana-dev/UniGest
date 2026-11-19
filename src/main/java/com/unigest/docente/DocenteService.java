@@ -25,7 +25,6 @@ public class DocenteService {
     private final RolRepository roles;
     private final PasswordEncoder passwordEncoder;
 
-// Demo pública: protege las cuentas de prueba. Opcional para las pruebas unitarias.
     private com.unigest.demo.DemoModo demo;
 
     @org.springframework.beans.factory.annotation.Autowired(required = false)
@@ -68,7 +67,6 @@ public class DocenteService {
                 .orElseThrow(() -> new IllegalStateException(
                         "No existe el rol DOCENTE"));
 
-        // Cuenta preparada sin contraseña de acceso conocida.
         String clave = passwordEncoder.encode(
                 UUID.randomUUID().toString() + UUID.randomUUID());
 
@@ -105,7 +103,6 @@ public class DocenteService {
 
         docente.actualizarDatos(codigo, documento);
 
-        // La fecha de vinculación se conserva.
         return convertir(docente);
     }
 

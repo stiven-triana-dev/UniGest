@@ -1,7 +1,3 @@
-/* UniGest · Tema "pizarra y resaltador" (v0.12) para el portal de docentes y estudiantes.
-   Misma paleta que panel/css/tema.css. Capa visual sobre app.css: quitar este
-   <link> devuelve el diseño anterior. */
-
 :root {
   --pizarra: #1e3a34;
   --pizarra-2: #2a4b44;
@@ -24,16 +20,12 @@
   color: var(--tinta);
   background: var(--tiza);
 }
-/* En esta fuente los números de ancho fijo también ensanchan el punto decimal:
-   se dejan las cifras proporcionales. */
 body { background: var(--tiza); font-size: 15px; }
 :focus-visible { outline: 3px solid var(--resaltador); outline-offset: 2px; }
 ::selection { background: var(--resaltador); color: var(--tinta); }
 
-/* Los rótulos en mayúsculas repetían el título de cada bloque. */
 .eyebrow { display: none; }
 
-/* Barra superior: la pizarra */
 .topbar { background: var(--pizarra); padding-block: 14px; }
 .brand img { width: 34px; height: 34px; background: var(--papel); border-radius: 8px; padding: 3px; }
 .brand b { font-size: 19px; font-weight: 700; letter-spacing: -.02em; }
@@ -48,13 +40,11 @@ main { padding: 32px 26px 64px; }
 .hero h1 { margin: 0 0 8px; font-size: clamp(30px, 3.4vw, 44px); font-weight: 700; letter-spacing: -.03em; line-height: 1.05; }
 .hero p { color: var(--grafito); font-size: 16px; margin: 0; }
 
-/* Tarjetas planas */
 .card { background: var(--papel); border: 1px solid var(--linea); border-radius: var(--radio); box-shadow: none; padding: 28px; }
 .card h2 { margin: 0 0 6px; font-size: 21px; font-weight: 700; letter-spacing: -.015em; }
 .card p, .muted { color: var(--grafito); font-size: 14px; line-height: 1.55; }
 .split { gap: 16px; }
 
-/* Controles */
 button { border-color: var(--linea); border-radius: var(--radio-control); color: var(--tinta); font-weight: 500; transition: background-color .15s; }
 button:hover { background: var(--tiza); }
 .primary { background: var(--pizarra); border-color: var(--pizarra); color: #fff; font-weight: 600; }
@@ -65,13 +55,11 @@ label { font-size: 14px; font-weight: 600; color: var(--tinta); }
 label input, label textarea { border-color: var(--linea); border-radius: var(--radio-control); }
 label input:focus, label textarea:focus, .select-label select:focus { outline: 0; border-color: var(--pizarra); box-shadow: 0 0 0 3px #f5cf4e80; }
 
-/* Tablas */
 th { background: transparent; color: var(--grafito); text-transform: none; letter-spacing: 0; font-size: 13px; font-weight: 600; border-bottom: 1px solid var(--linea); }
 td { border-bottom-color: var(--linea-suave); font-size: 14px; }
 td small { color: var(--grafito); }
 td button { border-radius: 6px; }
 
-/* Boletín: las cifras del resumen llevan el trazo de resaltador */
 .sum { gap: 10px; margin: 18px 0 8px; }
 .sum span {
   background: var(--papel); border: 1px solid var(--linea); border-radius: var(--radio-control);
@@ -84,7 +72,6 @@ td button { border-radius: 6px; }
 .pill { border-radius: 99px; background: var(--aprobado-fondo); color: var(--aprobado); font-weight: 700; font-size: 13px; padding: 5px 11px; display: inline-block; margin-bottom: 6px; }
 .pill.pending { background: var(--tiza); color: var(--grafito); }
 
-/* Avisos y diálogos */
 .notice { background: var(--alerta-fondo); color: var(--alerta); border-color: #efcfc6; border-radius: var(--radio-control); }
 .notice.ok { background: var(--aprobado-fondo); color: var(--aprobado); border-color: #c5e0d3; }
 dialog { border-color: var(--linea); border-radius: var(--radio); box-shadow: 0 30px 60px #0c181540; }
@@ -102,7 +89,6 @@ dialog h2 { margin: 0; font-size: 21px; font-weight: 700; }
   .sum span:last-child { background: none; border-color: #999; }
 }
 
-/* v0.13 · Boletín visual: períodos como pestañas, cifras en tarjetas y notas con barra */
 .periodos { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 6px; }
 .periodos button { padding: 8px 16px; border-radius: 99px; background: var(--papel); font-weight: 600; font-size: 14px; }
 .periodos button[aria-pressed="true"] { background: var(--pizarra); border-color: var(--pizarra); color: #fff; }
@@ -125,7 +111,6 @@ dialog h2 { margin: 0; font-size: 21px; font-weight: 700; }
 .pill { margin: 0; }
 .pill.baja { background: var(--alerta-fondo); color: var(--alerta); }
 
-/* Avance del curso: tramos del ancho de cada evaluación; lo gris falta por evaluar */
 .avance { display: flex; gap: 2px; height: 10px; margin: 18px 0 8px; border-radius: 99px; overflow: hidden; background: var(--linea-suave); }
 .avance i { display: block; height: 100%; background: var(--aprobado); }
 .avance i.baja { background: var(--alerta); }
@@ -135,7 +120,6 @@ dialog h2 { margin: 0; font-size: 21px; font-weight: 700; }
 .evaluaciones li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 9px 0; border-top: 1px solid var(--linea-suave); font-size: 14px; }
 .evaluacion small { margin-left: 8px; color: var(--grafito); font-size: 12px; }
 
-/* Nota con barra de 0 a 5; la línea marca el 3,0 */
 .nota { display: inline-flex; align-items: center; gap: 10px; }
 .nota b { min-width: 34px; text-align: right; font-weight: 700; }
 .nota i { position: relative; width: 84px; height: 6px; border-radius: 99px; background: var(--linea-suave); }

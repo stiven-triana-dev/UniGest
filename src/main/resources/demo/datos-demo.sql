@@ -1,9 +1,3 @@
--- UniGest · Datos de la demo pública (todos FICTICIOS).
--- Se cargan solo con UNIGEST_DEMO=true, después de vaciar las tablas académicas
--- (ver com.unigest.demo.DemoInicializador). {{CLAVE_DEMO}} y {{CLAVE_BLOQUEADA}}
--- se reemplazan por hashes BCrypt al arrancar: ninguna contraseña queda en texto.
-
--- Catálogo -----------------------------------------------------------------
 INSERT INTO programas (codigo, nombre) VALUES
  ('INGSIS', 'Ingeniería de Sistemas'),
  ('ADMEMP', 'Administración de Empresas'),
@@ -34,7 +28,6 @@ INSERT INTO periodos (codigo, nombre, fecha_inicio, fecha_fin, estado) VALUES
  ('2026-2', 'Segundo semestre de 2026', '2026-07-21', '2026-12-05', 'EN_CURSO'),
  ('2027-1', 'Primer semestre de 2027', '2027-01-18', '2027-06-12', 'PLANIFICADO');
 
--- Usuarios: las tres cuentas de prueba usan {{CLAVE_DEMO}}; el resto queda sin acceso.
 INSERT INTO usuarios (nombres, apellidos, correo, clave_hash, requiere_cambio_clave) VALUES
  ('Administración', 'Demo', 'admin@demo.test', '{{CLAVE_DEMO}}', false),
  ('Laura', 'Méndez', 'docente@demo.test', '{{CLAVE_DEMO}}', false),
@@ -81,7 +74,6 @@ FROM (VALUES
 JOIN usuarios u ON u.correo = v.correo
 JOIN programas p ON p.codigo = v.programa;
 
--- Grupos: 2026-1 cerrado, 2026-2 en curso y 2027-1 en planeación -------------
 INSERT INTO grupos (asignatura_id, docente_id, periodo_id, codigo, cupo, estado)
 SELECT a.id, u.id, pe.id, 'A', v.cupo, v.estado
 FROM (VALUES
@@ -121,8 +113,6 @@ JOIN periodos pe ON pe.codigo = v.periodo
 JOIN grupos g ON g.asignatura_id = a.id AND g.periodo_id = pe.id AND g.codigo = 'A'
 JOIN usuarios u ON u.correo = v.correo;
 
--- Evaluaciones: en cada grupo los porcentajes suman 100 %. En los grupos en curso
--- las últimas evaluaciones siguen sin publicar (el estudiante aún no ve esas notas).
 INSERT INTO evaluaciones (grupo_id, titulo, ponderacion, fecha, publicada)
 SELECT g.id, v.titulo, v.ponderacion, v.fecha::date, v.publicada
 FROM (VALUES
@@ -150,9 +140,6 @@ JOIN asignaturas a ON a.codigo = v.asignatura
 JOIN periodos pe ON pe.codigo = v.periodo
 JOIN grupos g ON g.asignatura_id = a.id AND g.periodo_id = pe.id AND g.codigo = 'A';
 
--- Notas: todas las evaluaciones publicadas tienen nota, y el docente ya adelantó
--- algunas de "Proyecto de árboles" (borrador, aún no visibles para estudiantes).
--- La nota sale de una fórmula fija (2.5 a 4.9) para que la demo sea igual siempre.
 INSERT INTO calificaciones (matricula_id, evaluacion_id, grupo_id, nota, fecha_registro, actualizado_en)
 SELECT m.id, e.id, m.grupo_id,
        round(2.5 + (abs(hashtext(u.correo || '|' || e.titulo || '|' || e.grupo_id)::bigint) % 25) / 10.0, 1),
@@ -163,7 +150,6 @@ JOIN usuarios u ON u.id = m.estudiante_id
 WHERE m.estado IN ('ACTIVA', 'ACTIVA')
   AND (e.publicada OR (e.titulo = 'Proyecto de árboles' AND u.correo IN ('estudiante@demo.test', 'v.rios@demo.test', 'j.cardenas@demo.test')));
 
--- Una corrección de nota con su motivo, para que se vea el historial.
 UPDATE calificaciones c SET nota = 4.2, actualizado_en = '2026-09-25'
 FROM evaluaciones e, matriculas m, usuarios u
 WHERE c.evaluacion_id = e.id AND c.matricula_id = m.id AND u.id = m.estudiante_id

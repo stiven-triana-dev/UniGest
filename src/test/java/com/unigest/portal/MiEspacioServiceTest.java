@@ -139,7 +139,6 @@ class MiEspacioServiceTest {
 
         when(e.getUsuario()).thenReturn(u);
 
-        // CORRECCIÓN: asignar el ID al estudiante simulado.
         when(e.getId()).thenReturn(5L);
 
         when(matriculas.findByEstudianteIdOrderByIdAsc(5L))

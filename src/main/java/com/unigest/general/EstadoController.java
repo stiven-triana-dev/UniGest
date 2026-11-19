@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class EstadoController {
-    /** La dirección principal abre la aplicación (pantalla de inicio de sesión). */
     @GetMapping("/")
     public ResponseEntity<Void> inicio() {
         return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/panel/index.html")).build();

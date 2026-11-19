@@ -41,12 +41,10 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(auth -> auth
 
-                // Permitir despachos internos de errores.
                 .dispatcherTypeMatchers(
                         DispatcherType.ERROR
                 ).permitAll()
 
-                // Recursos públicos.
                 .requestMatchers(HttpMethod.GET,
                         "/",
                         "/api/v1/estado",
@@ -56,63 +54,51 @@ public class SecurityConfig {
                         "/api/v1/demo",
                         "/panel/**",
                         "/portal/**",
-                        // Documentación de la API (Swagger). Probar rutas privadas exige sesión.
                         "/swagger-ui.html",
                         "/swagger-ui/**",
                         "/v3/api-docs",
                         "/v3/api-docs/**"
                 ).permitAll()
 
-                // Inicio de sesión.
                 .requestMatchers(HttpMethod.POST,
                         "/api/v1/auth/login"
                 ).permitAll()
 
-                // Usuario autenticado.
                 .requestMatchers(HttpMethod.GET,
                         "/api/v1/auth/me"
                 ).authenticated()
 
-                // Cambio de clave y estado de credencial: cualquier usuario autenticado.
                 .requestMatchers("/api/v1/auth/cambiar-clave", "/api/v1/auth/estado-clave")
                 .authenticated()
 
-                // Emisión de credenciales: únicamente administrador.
                 .requestMatchers("/api/v1/admin/accesos/**").hasRole("ADMIN")
 
-                // Mi espacio: los controladores también verifican rol, propiedad y cambio de clave.
                 .requestMatchers("/api/v1/mi-espacio/**").hasAnyRole("DOCENTE", "ESTUDIANTE")
 
-                // Estudiantes: solo ADMIN.
                 .requestMatchers(
                         "/api/v1/estudiantes",
                         "/api/v1/estudiantes/**"
                 ).hasRole("ADMIN")
 
-                // Docentes: solo ADMIN.
                 .requestMatchers(
                         "/api/v1/docentes",
                         "/api/v1/docentes/**"
                 ).hasRole("ADMIN")
 
-                // Grupos académicos: solo ADMIN.
                 .requestMatchers(
                         "/api/v1/grupos",
                         "/api/v1/grupos/**"
                 ).hasRole("ADMIN")
 
-                // Períodos académicos: consulta ADMIN.
                 .requestMatchers(HttpMethod.GET,
                         "/api/v1/periodos"
                 ).hasRole("ADMIN")
 
-                // Matrículas académicas: solo ADMIN.
                 .requestMatchers(
                         "/api/v1/matriculas",
                         "/api/v1/matriculas/**"
                 ).hasRole("ADMIN")
 
-                // Etapa 8: evaluaciones y calificaciones solo ADMIN.
                 .requestMatchers(
                         "/api/v1/evaluaciones",
                         "/api/v1/evaluaciones/**",
@@ -120,13 +106,11 @@ public class SecurityConfig {
                         "/api/v1/calificaciones/**"
                 ).hasRole("ADMIN")
 
-                // Etapa 9: reportes y boletines contienen información académica privada.
                 .requestMatchers(
                         "/api/v1/reportes",
                         "/api/v1/reportes/**"
                 ).hasRole("ADMIN")
 
-                // Denegar cualquier otra solicitud.
                 .anyRequest().denyAll()
         );
 

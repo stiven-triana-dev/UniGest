@@ -26,7 +26,6 @@ public class MiEspacioController {
         this.cuentas = cuentas;
     }
 
-    /** Comprueba la clave en el servidor, sin depender de la resolución de beans en SpEL. */
     private void exigirClaveDefinitiva(Authentication autenticacion) {
         if (!cuentas.claveDefinitiva(autenticacion.getName())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,

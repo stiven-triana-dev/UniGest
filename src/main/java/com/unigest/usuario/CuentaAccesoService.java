@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-/** Credenciales individuales: no usa contraseñas universales ni las registra en logs. */
 @Service("cuentaAccesoService")
 public class CuentaAccesoService {
     private static final SecureRandom ALEATORIO = new SecureRandom();
@@ -22,7 +21,6 @@ public class CuentaAccesoService {
     }
 
 
-    // Demo pública: protege las cuentas de prueba. Opcional para las pruebas unitarias.
     private com.unigest.demo.DemoModo demo;
 
     @org.springframework.beans.factory.annotation.Autowired(required = false)
@@ -52,7 +50,6 @@ public class CuentaAccesoService {
         ALEATORIO.nextBytes(bytes);
         String temporal = Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
         u.cambiarClave(encoder.encode(temporal), true);
-        // Única respuesta con el secreto. Nunca se almacena el secreto en texto claro.
         return new CredencialTemporal(u.getCorreo(), temporal);
     }
 
@@ -89,6 +86,5 @@ public class CuentaAccesoService {
                 "Cuenta no disponible"));
     }
 
-    // El hash es accesible solo dentro del módulo de usuarios.
     private String obtenerHash(Usuario usuario) { return usuario.obtenerClaveHash(); }
 }
