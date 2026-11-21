@@ -268,7 +268,9 @@
       if (s.ok) toast('Sesión iniciada correctamente.');
     } catch (e) {
       reset();
-      formError('login-error', errorText(e, 'No se pudo iniciar sesión'));
+      formError('login-error', e?.status === 401
+        ? 'El correo o la contraseña no son correctos.'
+        : errorText(e, 'No se pudo iniciar sesión'));
     } finally {
       $('login-password').value = '';
       btn.disabled = false;
@@ -2033,12 +2035,19 @@
     });
   }
 
+  function localEnvironment() {
+    $('login-note').lastChild.textContent = ' Entorno local de desarrollo · Utiliza datos ficticios';
+    $('env-title').textContent = 'Entorno local';
+    $('env-detail').textContent = 'Solo para desarrollo y pruebas';
+    $('env-badge').textContent = 'Localhost';
+  }
+
   async function demoAccess() {
     try {
       const res = await fetch(`${API}/demo`, {credentials:'same-origin'});
-      if (!res.ok) return;
+      if (!res.ok) return localEnvironment();
       const demo = await res.json();
-      if (!demo.activo) return;
+      if (!demo.activo) return localEnvironment();
       $('demo-password').textContent = demo.clave;
       const buttons = $('demo-buttons');
       buttons.replaceChildren(...demo.cuentas.map(cuenta => {

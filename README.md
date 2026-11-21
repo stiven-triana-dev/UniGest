@@ -199,6 +199,8 @@ Para que la demo no tarde en abrir, programé una visita periódica con cron-job
 
 También aprendí cosas pequeñas pero reales: normalizar los saltos de línea entre Windows y Linux con `.gitattributes`, no dejar rutas de mi computador en los scripts, no publicar versiones viejas del JavaScript en `static/`, y hacer que la demo pública reinicie sus datos en cada arranque para que nadie pueda dañarla.
 
+Después hice VisagQA, un repositorio con pruebas de punta a punta que usan la demo como lo haría una persona, y encontraron tres errores. El logo no se veía: cuando quité los comentarios del código con un script, el script abrió también el PNG como si fuera texto y lo guardó dañado (los primeros bytes pasaron de `89 50 4E 47` a `EF BF BD`). Lo recuperé de una versión anterior del historial de git y revisé los archivos binarios de todos mis proyectos: era el único dañado. Aprendí que cualquier script que edite archivos en masa debe filtrar por extensión y nunca tocar imágenes. El segundo error: la pantalla de entrada mostraba «Entorno local de desarrollo» y el panel «Datos del servidor local» en la demo pública, porque esos eran los textos iniciales y solo cambiaban cuando la página confirmaba el modo demo; ahora arrancan con textos neutros y solo dicen «Entorno local» cuando de verdad lo es. El tercero: con una contraseña equivocada, la pantalla decía «La sesión no es válida o ha expirado», porque todos los errores 401 compartían ese mensaje; en el inicio de sesión ahora dice «El correo o la contraseña no son correctos.».
+
 ## 🗺️ Próximas mejoras
 
 - [x] Documentación de la API con OpenAPI/Swagger
