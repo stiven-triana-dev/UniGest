@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
@@ -18,6 +19,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 class DocumentacionApiTest {
 
     @Autowired private WebApplicationContext contexto;
+    @Autowired private BuildProperties compilacion;
     private MockMvc mockMvc;
 
     @BeforeEach
@@ -39,6 +41,13 @@ class DocumentacionApiTest {
         assertTrue(json.contains("/api/v1/mi-espacio/estudiante/boletin"));
         assertTrue(json.contains("3. Estudiantes"), "los grupos de rutas deben tener nombre en español");
         assertFalse(json.contains("-controller"), "no deben quedar nombres técnicos de controlador");
+    }
+
+    @Test
+    void elEstadoYLaDocumentacionMuestranLaVersionDelProyecto() throws Exception {
+        String version = compilacion.getVersion();
+        assertTrue(pedir("/api/v1/estado").getContentAsString().contains("\"version\":\"" + version + "\""));
+        assertTrue(pedir("/v3/api-docs").getContentAsString().contains("\"version\":\"" + version + "\""));
     }
 
     @Test

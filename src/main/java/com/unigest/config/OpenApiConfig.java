@@ -1,5 +1,6 @@
 package com.unigest.config;
 
+import com.unigest.general.Version;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
@@ -9,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.springdoc.core.customizers.OpenApiCustomizer;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -33,10 +36,10 @@ public class OpenApiConfig {
             Map.entry("demo-controller", new String[] {"15. Demo", "Información de la demo pública."}));
 
     @Bean
-    OpenAPI unigestOpenApi() {
+    OpenAPI unigestOpenApi(ObjectProvider<BuildProperties> compilacion) {
         return new OpenAPI().info(new Info()
                 .title("UniGest API")
-                .version("0.11.0")
+                .version(Version.de(compilacion))
                 .description("""
                         API REST de gestión académica: estudiantes, docentes, grupos, matrículas, \
                         evaluaciones, notas y reportes.
