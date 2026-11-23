@@ -10,7 +10,7 @@
 
 **UniGest** es una aplicación web para administrar procesos académicos universitarios con tres espacios de trabajo: **administración, docencia y estudiantes**. Gestiona matrículas, grupos, evaluaciones, calificaciones y boletines, con acceso controlado según el rol del usuario.
 
-**Versión:** `v0.11.0` · **Pruebas:** 100 automatizadas, 0 fallos · **CI:** GitHub Actions con Java 21 y PostgreSQL 18
+**Versión:** `v0.11.0` · **Pruebas:** 101 automatizadas, 0 fallos · **CI:** GitHub Actions con Java 21 y PostgreSQL 18
 
 ## 🌐 Demo en línea
 
@@ -191,7 +191,7 @@ Flyway me enseñó a tratar la base de datos como código: cada cambio es una mi
 
 En seguridad usé Spring Security con sesiones, contraseñas con BCrypt y tres roles. Aprendí que no basta con proteger la ruta: dentro del servicio también verifico que un docente solo vea sus grupos y un estudiante solo sus notas publicadas. Las pruebas de autorización comprueban, por ejemplo, que un estudiante recibe 403 en las rutas de administración.
 
-Las primeras pruebas de integración dependían de identificadores fijos en la base, lo que las hacía frágiles. Las cambié para que cada prueba cree sus propios datos dentro de una transacción que se deshace al terminar. Hoy son 100 pruebas con JUnit, Mockito y MockMvc, y GitHub Actions las corre con un PostgreSQL real en cada cambio.
+Las primeras pruebas de integración dependían de identificadores fijos en la base, lo que las hacía frágiles. Las cambié para que cada prueba cree sus propios datos dentro de una transacción que se deshace al terminar. Hoy son 101 pruebas con JUnit, Mockito y MockMvc, y GitHub Actions las corre con un PostgreSQL real en cada cambio.
 
 Publicarlo gratis en Render trajo sus propios problemas. Tuve que limitar la memoria de Java en el Dockerfile para no pasarme de los 512 MB del plan. Con tan poca CPU tardaba mucho en arrancar; con CDS, el compilador C1 y la inicialización perezosa de Spring bajó de 16 a unos 4,5 segundos en una prueba local con un solo núcleo. La base de Neon no se suspendía nunca porque el pool de conexiones dejaba conexiones abiertas; las configuré para que se cierren cuando no se usan.
 
@@ -199,7 +199,7 @@ Para que la demo no tarde en abrir, programé una visita periódica con cron-job
 
 También aprendí cosas pequeñas pero reales: normalizar los saltos de línea entre Windows y Linux con `.gitattributes`, no dejar rutas de mi computador en los scripts, no publicar versiones viejas del JavaScript en `static/`, y hacer que la demo pública reinicie sus datos en cada arranque para que nadie pueda dañarla.
 
-Después hice VisagQA, un repositorio con pruebas de punta a punta que usan la demo como lo haría una persona, y encontraron tres errores. El logo no se veía: cuando quité los comentarios del código con un script, el script abrió también el PNG como si fuera texto y lo guardó dañado (los primeros bytes pasaron de `89 50 4E 47` a `EF BF BD`). Lo recuperé de una versión anterior del historial de git y revisé los archivos binarios de todos mis proyectos: era el único dañado. Aprendí que cualquier script que edite archivos en masa debe filtrar por extensión y nunca tocar imágenes. El segundo error: la pantalla de entrada mostraba «Entorno local de desarrollo» y el panel «Datos del servidor local» en la demo pública, porque esos eran los textos iniciales y solo cambiaban cuando la página confirmaba el modo demo; ahora arrancan con textos neutros y solo dicen «Entorno local» cuando de verdad lo es. El tercero: con una contraseña equivocada, la pantalla decía «La sesión no es válida o ha expirado», porque todos los errores 401 compartían ese mensaje; en el inicio de sesión ahora dice «El correo o la contraseña no son correctos.».
+Después hice VisagQA, un repositorio con pruebas de punta a punta que usan la demo como lo haría una persona, y encontraron tres errores. El logo no se veía: cuando quité los comentarios del código con un script, el script abrió también el PNG como si fuera texto y lo guardó dañado (los primeros bytes pasaron de `89 50 4E 47` a `EF BF BD`). Lo recuperé de una versión anterior del historial de git y revisé los archivos binarios de todos mis proyectos: era el único dañado. Aprendí que cualquier script que edite archivos en masa debe filtrar por extensión y nunca tocar imágenes. El segundo error: la pantalla de entrada mostraba «Entorno local de desarrollo» y el panel «Datos del servidor local» en la demo pública, porque esos eran los textos iniciales y solo cambiaban cuando la página confirmaba el modo demo; ahora arrancan con textos neutros y solo dicen «Entorno local» cuando de verdad lo es. El tercero: con una contraseña equivocada, la pantalla decía «La sesión no es válida o ha expirado», porque todos los errores 401 compartían ese mensaje; en el inicio de sesión ahora dice «El correo o la contraseña no son correctos.». Más tarde, probando la API con Postman, VisagQA encontró un cuarto error: la ruta de estado decía versión «0.3.0» mientras el proyecto va en la 0.11.0, porque la versión estaba escrita a mano en cuatro lugares y una se quedó atrás. Ahora la versión del estado y de la documentación se lee del `pom.xml` al compilar (con `build-info` de Spring Boot) y una prueba verifica que coincidan.
 
 ## 🗺️ Próximas mejoras
 
